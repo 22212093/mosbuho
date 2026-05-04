@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MORSE CODE — 점과 선으로 말하다</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+KR:wght@400;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-grass: #6ab02e;
+    --bg-grass-dark: #3a6b1a;
+    --pcb-bg: #0d1410;
+    --pcb-pad: #5a7a3a;
+    --pcb-pad-bright: #b8e84a;
+    --pcb-trace: #c8d4b0;
+    --pcb-silk: #e8e8d8;
+    --green-glow: rgba(184,232,74,0.6);
+    --dot-color: #ffd84a;
+    --dash-color: #b8e84a;
+  }
+
+  body {
+    background: radial-gradient(ellipse at center, var(--bg-grass) 0%, var(--bg-grass-dark) 70%, #1a3a08 100%);
+    min-height: 100vh;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #fff;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255,255,180,0.15) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(60,120,30,0.4) 0%, transparent 50%),
+      radial-gradient(circle at 50% 100%, rgba(20,50,10,0.5) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .header-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+    margin: 1rem 0 0.3rem;
+    z-index: 1;
+  }
+  .header-sub {
+    font-family: 'Share Tech Mono', monospace;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    margin-bottom: 1.5rem;
+    z-index: 1;
+  }
+
+  .pcb-wrapper { perspective: 1200px; z-index: 1; margin-bottom: 2rem; }
+  .pcb-card {
+    width: min(90vw, 380px);
+    aspect-ratio: 5 / 7;
+    background: var(--pcb-bg);
+    border-radius: 18px;
+    padding: 22px 18px 18px;
+    position: relative;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.4), inset 0 0 0 1.5px rgba(255,255,255,0.08);
+    transform: rotateX(2deg);
+  }
+  .pcb-card::before {
+    content: '';
+    position: absolute;
+    top: 14px; right: 14px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(circle, transparent 40%, rgba(200,212,176,0.4) 50%, transparent 60%);
+    border: 1.5px solid rgba(200,212,176,0.5);
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.8);
+  }
+  .pcb-card::after {
+    content: '';
+    position: absolute;
+    right: -3px;
+    top: 30%;
+    width: 6px;
+    height: 40%;
+    background: linear-gradient(to bottom,
+      transparent 0%, transparent 8%,
+      var(--pcb-pad) 8%, var(--pcb-pad) 18%,
+      transparent 18%, transparent 32%,
+      var(--pcb-pad) 32%, var(--pcb-pad) 42%,
+      transparent 42%, transparent 56%,
+      var(--pcb-pad) 56%, var(--pcb-pad) 66%,
+      transparent 66%, transparent 80%,
+      var(--pcb-pad) 80%, var(--pcb-pad) 90%,
+      transparent 90%);
+    border-radius: 2px;
+  }
+  .pcb-title {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
+    font-size: clamp(0.95rem, 2.6vw, 1.15rem);
+    color: var(--pcb-silk);
+    letter-spacing: 0.15em;
+    padding: 0 6px;
+    margin-bottom: 6px;
+  }
+  svg.tree { width: 100%; height: auto; display: block; }
+  .node { cursor: pointer; transition: filter 0.15s; }
+  .node .pad {
+    fill: var(--pcb-pad);
+    stroke: var(--pcb-trace);
+    stroke-width: 1.2;
+    transition: fill 0.1s, filter 0.1s;
+  }
+  .node.lit .pad {
+    fill: var(--pcb-pad-bright);
+    filter: drop-shadow(0 0 6px var(--green-glow)) drop-shadow(0 0 12px var(--green-glow));
+  }
+  .node text {
+    fill: var(--pcb-silk);
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+  }
+  .trace { stroke: var(--pcb-trace); stroke-width: 1.6; fill: none; opacity: 0.85; }
+  .silk-dot { fill: rgba(200,212,176,0.4); }
+  .antenna { fill: none; stroke: var(--pcb-silk); stroke-width: 1.4; }
+
+  .controls {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: min(90vw, 480px);
+    margin-bottom: 2rem;
+  }
+
+  .input-display {
+    width: 100%;
+    background: rgba(13,20,16,0.85);
+    border: 1px solid rgba(184,232,74,0.4);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .input-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.4rem;
+  }
+  .input-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(184,232,74,0.7);
+    letter-spacing: 0.2em;
+  }
+  .input-value {
+    font-family: 'Share Tech Mono', monospace;
+    color: #b8e84a;
+    text-shadow: 0 0 8px var(--green-glow);
+    font-size: 1.4rem;
+    letter-spacing: 0.2em;
+    min-height: 1.6em;
+    word-break: break-all;
+    text-align: right;
+  }
+  .current-input {
+    font-family: 'Share Tech Mono', monospace;
+    color: #ffd84a;
+    font-size: 1.6rem;
+    letter-spacing: 0.3em;
+    text-shadow: 0 0 8px rgba(255,216,74,0.6);
+    min-height: 1.6em;
+    text-align: center;
+    border-top: 1px dashed rgba(184,232,74,0.3);
+    padding-top: 0.6rem;
+    margin-top: 0.4rem;
+  }
+  .current-input::after {
+    content: '▌';
+    color: #ffd84a;
+    margin-left: 4px;
+    animation: blink 0.8s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .key-buttons {
+    display: flex;
+    gap: 0.6rem;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .telegraph-key {
+    width: 100%;
+    position: relative;
+    padding: 1.6rem 1.2rem;
+    border: 2px solid rgba(255,255,255,0.4);
+    background: rgba(13,20,16,0.7);
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.05s;
+    backdrop-filter: blur(8px);
+    user-select: none;
+    -webkit-user-select: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    overflow: hidden;
+    touch-action: manipulation;
+  }
+  .telegraph-key.pressing {
+    transform: translateY(2px);
+    border-color: var(--dot-color);
+    color: var(--dot-color);
+    box-shadow: 0 0 16px rgba(255,216,74,0.4), inset 0 0 12px rgba(255,216,74,0.15);
+  }
+  .telegraph-key.pressing.is-dash {
+    border-color: var(--dash-color);
+    color: var(--dash-color);
+    box-shadow: 0 0 20px var(--green-glow), inset 0 0 16px rgba(184,232,74,0.25);
+  }
+
+  .key-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0%;
+    background: linear-gradient(90deg, rgba(255,216,74,0.25), rgba(255,216,74,0.4));
+    transition: background 0.1s;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .telegraph-key.is-dash .key-fill {
+    background: linear-gradient(90deg, rgba(184,232,74,0.3), rgba(184,232,74,0.5));
+  }
+
+  .key-threshold {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: rgba(255,255,255,0.5);
+    box-shadow: 0 0 6px rgba(255,255,255,0.6);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .key-threshold::after {
+    content: '';
+    position: absolute;
+    top: -4px; left: -4px;
+    width: 10px; height: 10px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(255,255,255,0.8);
+  }
+
+  .telegraph-key .label-row {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .telegraph-key .symbol-preview {
+    font-size: 2rem;
+    line-height: 1;
+    min-height: 2rem;
+    transition: opacity 0.1s, transform 0.1s;
+    opacity: 0.4;
+  }
+  .telegraph-key.pressing .symbol-preview { opacity: 1; transform: scale(1.2); }
+  .telegraph-key .hint {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.15em;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .key-btn {
+    flex: 1;
+    min-width: 90px;
+    padding: 0.9rem 1rem;
+    border: 2px solid rgba(255,255,255,0.4);
+    background: rgba(13,20,16,0.7);
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.1s;
+    backdrop-filter: blur(8px);
+    user-select: none;
+    -webkit-user-select: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .key-btn:active, .key-btn.pressed {
+    transform: translateY(2px);
+    background: rgba(184,232,74,0.3);
+    border-color: #b8e84a;
+    color: #b8e84a;
+    box-shadow: 0 0 16px var(--green-glow);
+  }
+  .key-btn .hint {
+    display: block;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+    letter-spacing: 0.15em;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .sensitivity {
+    width: 100%;
+    background: rgba(13,20,16,0.7);
+    border: 1px solid rgba(184,232,74,0.3);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.85);
+  }
+  .sensitivity label { letter-spacing: 0.1em; white-space: nowrap; }
+  .sensitivity input[type=range] { flex: 1; accent-color: var(--dash-color); }
+  .sensitivity .val {
+    color: var(--dash-color);
+    min-width: 70px;
+    text-align: right;
+    text-shadow: 0 0 6px var(--green-glow);
+  }
+
+  .helper-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    line-height: 1.7;
+  }
+  .helper-text kbd {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: inherit;
+    color: #fff;
+    margin: 0 2px;
+  }
+  .helper-text .dot-color { color: var(--dot-color); font-weight: bold; }
+  .helper-text .dash-color { color: var(--dash-color); font-weight: bold; }
+
+  footer {
+    z-index: 1;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.15em;
+    padding: 1rem;
+    text-align: center;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  }
+</style>
+</head>
+<body>
+
+<div class="header-title">모스부호 · MORSE CODE</div>
+<div class="header-sub">점과 선으로 말하다</div>
+
+<div class="pcb-wrapper">
+<div class="pcb-card" id="pcbCard">
+  <div class="pcb-title"><span>MORSE</span><span>CODE</span></div>
+  <svg class="tree" viewBox="0 0 340 440" id="treeSvg" xmlns="http://www.w3.org/2000/svg">
+    <g class="antenna">
+      <line x1="170" y1="22" x2="170" y2="50"/>
+      <polygon points="160,22 180,22 170,8" fill="none" stroke="#e8e8d8" stroke-width="1.4"/>
+      <line x1="167" y1="14" x2="173" y2="14"/>
+    </g>
+    <line class="trace" x1="40" y1="60" x2="155" y2="60"/>
+    <line class="trace" x1="185" y1="60" x2="310" y2="60"/>
+    <line class="trace" x1="155" y1="60" x2="155" y2="310"/>
+    <line class="trace" x1="200" y1="60" x2="200" y2="220"/>
+    <line class="trace" x1="115" y1="60" x2="115" y2="120"/>
+    <line class="trace" x1="65"  y1="120" x2="115" y2="120"/>
+    <line class="trace" x1="115" y1="120" x2="115" y2="170"/>
+    <line class="trace" x1="65" y1="225" x2="155" y2="225"/>
+    <line class="trace" x1="40" y1="225" x2="65" y2="225"/>
+    <line class="trace" x1="105" y1="225" x2="105" y2="275"/>
+    <line class="trace" x1="80" y1="310" x2="155" y2="310"/>
+    <line class="trace" x1="50" y1="310" x2="80" y2="310"/>
+    <line class="trace" x1="115" y1="310" x2="115" y2="365"/>
+    <line class="trace" x1="155" y1="355" x2="200" y2="355"/>
+    <line class="trace" x1="155" y1="310" x2="155" y2="395"/>
+    <line class="trace" x1="240" y1="60" x2="240" y2="120"/>
+    <line class="trace" x1="275" y1="60" x2="275" y2="120"/>
+    <line class="trace" x1="240" y1="120" x2="240" y2="170"/>
+    <line class="trace" x1="155" y1="220" x2="265" y2="220"/>
+    <line class="trace" x1="225" y1="220" x2="265" y2="220"/>
+    <circle class="silk-dot" cx="320" cy="100" r="1"/>
+    <circle class="silk-dot" cx="22"  cy="170" r="1"/>
+    <circle class="silk-dot" cx="320" cy="180" r="1"/>
+    <circle class="silk-dot" cx="22"  cy="280" r="1"/>
+    <circle class="silk-dot" cx="170" cy="160" r="1"/>
+    <circle class="silk-dot" cx="170" cy="200" r="1"/>
+    <circle class="silk-dot" cx="80"  cy="380" r="1"/>
+    <circle class="silk-dot" cx="280" cy="380" r="1"/>
+    <g class="node" data-letter="O"><rect class="pad" x="20" y="52" width="32" height="16" rx="2"/><text x="60" y="76">O</text></g>
+    <g class="node" data-letter="M"><rect class="pad" x="95" y="52" width="32" height="16" rx="2"/><text x="135" y="76">M</text></g>
+    <g class="node" data-letter="T"><rect class="pad" x="143" y="52" width="24" height="16" rx="2"/><text x="175" y="76">T</text></g>
+    <g class="node" data-letter="E"><circle class="pad" cx="200" cy="60" r="8"/><text x="200" y="78">E</text></g>
+    <g class="node" data-letter="I"><circle class="pad" cx="240" cy="60" r="8"/><text x="240" y="78">I</text></g>
+    <g class="node" data-letter="S"><circle class="pad" cx="275" cy="60" r="8"/><text x="275" y="78">S</text></g>
+    <g class="node" data-letter="H"><circle class="pad" cx="310" cy="60" r="8"/><text x="310" y="78">H</text></g>
+    <g class="node" data-letter="Q"><rect class="pad" x="45" y="112" width="24" height="16" rx="2"/><text x="40" y="142">Q</text></g>
+    <g class="node" data-letter="G"><circle class="pad" cx="115" cy="120" r="8"/><text x="135" y="124">G</text></g>
+    <g class="node" data-letter="U"><rect class="pad" x="228" y="112" width="24" height="16" rx="2"/><text x="225" y="142">U</text></g>
+    <g class="node" data-letter="V"><rect class="pad" x="263" y="112" width="24" height="16" rx="2"/><text x="295" y="124">V</text></g>
+    <g class="node" data-letter="Z"><circle class="pad" cx="115" cy="170" r="8"/><text x="130" y="186">Z</text></g>
+    <g class="node" data-letter="F"><circle class="pad" cx="240" cy="170" r="8"/><text x="258" y="174">F</text></g>
+    <g class="node" data-letter="Y"><rect class="pad" x="20" y="217" width="24" height="16" rx="2"/><text x="58" y="225">Y</text></g>
+    <g class="node" data-letter="K"><rect class="pad" x="80" y="217" width="24" height="16" rx="2"/><text x="78" y="246">K</text></g>
+    <g class="node" data-letter="N"><circle class="pad" cx="155" cy="225" r="8"/><text x="173" y="244">N</text></g>
+    <g class="node" data-letter="A"><rect class="pad" x="178" y="212" width="24" height="16" rx="2"/><text x="190" y="244">A</text></g>
+    <g class="node" data-letter="R"><circle class="pad" cx="225" cy="220" r="8"/><text x="225" y="240">R</text></g>
+    <g class="node" data-letter="L"><circle class="pad" cx="265" cy="220" r="8"/><text x="285" y="224">L</text></g>
+    <g class="node" data-letter="C"><circle class="pad" cx="105" cy="275" r="8"/><text x="120" y="290">C</text></g>
+    <g class="node" data-letter="X"><rect class="pad" x="30" y="302" width="24" height="16" rx="2"/><text x="68" y="310">X</text></g>
+    <g class="node" data-letter="D"><circle class="pad" cx="115" cy="310" r="8"/><text x="130" y="328">D</text></g>
+    <g class="node" data-letter="W"><rect class="pad" x="143" y="347" width="24" height="16" rx="2"/><text x="160" y="378">W</text></g>
+    <g class="node" data-letter="P"><circle class="pad" cx="200" cy="355" r="8"/><text x="218" y="358">P</text></g>
+    <g class="node" data-letter="B"><circle class="pad" cx="115" cy="365" r="8"/><text x="115" y="388">B</text></g>
+    <g class="node" data-letter="J"><rect class="pad" x="143" y="395" width="24" height="16" rx="2"/><text x="175" y="412">J</text></g>
+  </svg>
+</div>
+</div>
+
+<div class="controls">
+  <div class="input-display">
+    <div class="input-row">
+      <span class="input-label">// 텍스트</span>
+      <span class="input-value" id="textOut">&nbsp;</span>
+    </div>
+    <div class="input-row">
+      <span class="input-label">// 모스부호</span>
+      <span class="input-value" id="morseOut">&nbsp;</span>
+    </div>
+    <div class="current-input" id="currentBuf"></div>
+  </div>
+
+  <div class="key-buttons">
+    <button class="telegraph-key" id="btnKey">
+      <div class="key-fill" id="keyFill"></div>
+      <div class="key-threshold" id="keyThreshold"></div>
+      <div class="label-row">
+        <div class="symbol-preview" id="symPreview">·</div>
+        <div>전신키 · TELEGRAPH KEY</div>
+        <div class="hint">SPACE — 짧게 누르면 점, 길게 누르면 선</div>
+      </div>
+    </button>
+  </div>
+
+  <div class="key-buttons">
+    <button class="key-btn" id="btnSpace">띄어쓰기<span class="hint">SHIFT</span></button>
+    <button class="key-btn" id="btnDel">← 지우기<span class="hint">⌫</span></button>
+    <button class="key-btn" id="btnPlay">▶ 재생<span class="hint">P</span></button>
+    <button class="key-btn" id="btnClear">초기화</button>
+  </div>
+
+  <div class="sensitivity">
+    <label>임계값</label>
+    <input type="range" id="threshold" min="100" max="500" step="10" value="200">
+    <span class="val" id="thresholdVal">200ms</span>
+  </div>
+
+  <div class="helper-text">
+    <kbd>SPACE</kbd> 짧게 → <span class="dot-color">점(·)</span> &nbsp;·&nbsp;
+    <kbd>SPACE</kbd> 길게 → <span class="dash-color">선(─)</span><br>
+    누르고 있으면 실시간으로 색이 바뀝니다 — 떼는 순간 입력 결정
+  </div>
+</div>
+
+<footer>&lt; SAMUEL F. B. MORSE · 1836 · DOT &amp; DASH &gt;</footer>
+
+<script>
+const MORSE = {
+  A:'.-', B:'-...', C:'-.-.', D:'-..', E:'.', F:'..-.', G:'--.', H:'....',
+  I:'..', J:'.---', K:'-.-', L:'.-..', M:'--', N:'-.', O:'---', P:'.--.',
+  Q:'--.-', R:'.-.', S:'...', T:'-', U:'..-', V:'...-', W:'.--', X:'-..-',
+  Y:'-.--', Z:'--..'
+};
+const FROM_MORSE = Object.fromEntries(Object.entries(MORSE).map(([l, m]) => [m, l]));
+
+let buffer = '';
+let text = '';
+let commitTimer = null;
+const COMMIT_DELAY = 1200;
+
+let DASH_THRESHOLD = 200;
+const MAX_PRESS_DISPLAY = 600;
+
+const $ = id => document.getElementById(id);
+
+let audioCtx = null;
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+let liveOsc = null, liveGain = null;
+function startLiveTone() {
+  const ctx = getAudio();
+  if (liveOsc) return;
+  liveOsc = ctx.createOscillator();
+  liveGain = ctx.createGain();
+  liveOsc.connect(liveGain);
+  liveGain.connect(ctx.destination);
+  liveOsc.frequency.value = 600;
+  liveOsc.type = 'sine';
+  liveGain.gain.setValueAtTime(0, ctx.currentTime);
+  liveGain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.01);
+  liveOsc.start();
+}
+function stopLiveTone() {
+  if (!liveOsc) return;
+  const ctx = getAudio();
+  liveGain.gain.cancelScheduledValues(ctx.currentTime);
+  liveGain.gain.setValueAtTime(liveGain.gain.value, ctx.currentTime);
+  liveGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.02);
+  liveOsc.stop(ctx.currentTime + 0.05);
+  liveOsc = null; liveGain = null;
+}
+
+function render() {
+  $('currentBuf').textContent = buffer.replace(/\./g, '·').replace(/-/g, '─');
+  $('textOut').textContent = text || '\u00a0';
+  $('morseOut').textContent = text.split('').map(c => c === ' ' ? '/' : MORSE[c] || '').join(' ') || '\u00a0';
+}
+
+function lightUpLetter(letter) {
+  document.querySelectorAll('.node.lit').forEach(n => n.classList.remove('lit'));
+  if (!letter) return;
+  const node = document.querySelector(`.node[data-letter="${letter}"]`);
+  if (node) {
+    node.classList.add('lit');
+    setTimeout(() => node.classList.remove('lit'), 1400);
+  }
+}
+
+function previewLetter() {
+  document.querySelectorAll('.node.lit').forEach(n => n.classList.remove('lit'));
+  const preview = FROM_MORSE[buffer];
+  if (preview) {
+    const node = document.querySelector(`.node[data-letter="${preview}"]`);
+    if (node) node.classList.add('lit');
+  }
+}
+
+function addSymbol(sym) {
+  buffer += sym;
+  resetCommitTimer();
+  render();
+  previewLetter();
+}
+
+function resetCommitTimer() {
+  if (commitTimer) clearTimeout(commitTimer);
+  commitTimer = setTimeout(commitLetter, COMMIT_DELAY);
+}
+
+function commitLetter() {
+  if (!buffer) return;
+  const letter = FROM_MORSE[buffer];
+  if (letter) { text += letter; lightUpLetter(letter); }
+  else text += '?';
+  buffer = '';
+  render();
+}
+
+function addSpace() {
+  if (buffer) commitLetter();
+  if (text && !text.endsWith(' ')) text += ' ';
+  render();
+}
+
+function backspace() {
+  if (buffer) buffer = buffer.slice(0, -1);
+  else if (text) text = text.slice(0, -1);
+  render();
+}
+
+function clearAll() {
+  buffer = ''; text = '';
+  document.querySelectorAll('.node.lit').forEach(n => n.classList.remove('lit'));
+  render();
+}
+
+function playAll() {
+  if (buffer) commitLetter();
+  if (!text) return;
+  const ctx = getAudio();
+  const DOT = 90, DASH = DOT * 3, GAP = DOT, LETTER_GAP = DOT * 3, WORD_GAP = DOT * 7;
+  let t = ctx.currentTime + 0.05;
+
+  text.split('').forEach(ch => {
+    if (ch === ' ') { t += WORD_GAP / 1000; return; }
+    const code = MORSE[ch];
+    if (!code) return;
+    const startMs = (t - ctx.currentTime) * 1000;
+    setTimeout(() => lightUpLetter(ch), startMs);
+    code.split('').forEach(s => {
+      const dur = s === '.' ? DOT : DASH;
+      beep(t, dur);
+      t += (dur + GAP) / 1000;
+    });
+    t += (LETTER_GAP - GAP) / 1000;
+  });
+}
+
+function beep(start, dur) {
+  const ctx = getAudio();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.frequency.value = 600;
+  osc.type = 'sine';
+  gain.gain.setValueAtTime(0, start);
+  gain.gain.linearRampToValueAtTime(0.25, start + 0.005);
+  gain.gain.setValueAtTime(0.25, start + dur / 1000 - 0.005);
+  gain.gain.linearRampToValueAtTime(0, start + dur / 1000);
+  osc.start(start);
+  osc.stop(start + dur / 1000);
+}
+
+function flashBtn(btn) {
+  btn.classList.add('pressed');
+  setTimeout(() => btn.classList.remove('pressed'), 120);
+}
+
+const btnKey = $('btnKey');
+const keyFill = $('keyFill');
+const symPreview = $('symPreview');
+let pressStartTime = 0;
+let rafId = null;
+
+function updateThresholdMarker() {
+  const pct = (DASH_THRESHOLD / MAX_PRESS_DISPLAY) * 100;
+  $('keyThreshold').style.left = Math.min(pct, 98) + '%';
+}
+
+function startPress() {
+  if (pressStartTime > 0) return;
+  pressStartTime = performance.now();
+  btnKey.classList.add('pressing');
+  btnKey.classList.remove('is-dash');
+  symPreview.textContent = '·';
+  startLiveTone();
+  tickPress();
+}
+
+function tickPress() {
+  if (pressStartTime === 0) return;
+  const elapsed = performance.now() - pressStartTime;
+  const pct = Math.min((elapsed / MAX_PRESS_DISPLAY) * 100, 100);
+  keyFill.style.width = pct + '%';
+
+  if (elapsed >= DASH_THRESHOLD) {
+    btnKey.classList.add('is-dash');
+    symPreview.textContent = '─';
+  } else {
+    btnKey.classList.remove('is-dash');
+    symPreview.textContent = '·';
+  }
+
+  rafId = requestAnimationFrame(tickPress);
+}
+
+function endPress() {
+  if (pressStartTime === 0) return;
+  const duration = performance.now() - pressStartTime;
+  pressStartTime = 0;
+  if (rafId) cancelAnimationFrame(rafId);
+  stopLiveTone();
+
+  btnKey.classList.remove('pressing', 'is-dash');
+  keyFill.style.width = '0%';
+  symPreview.textContent = '·';
+
+  if (duration < DASH_THRESHOLD) addSymbol('.');
+  else addSymbol('-');
+}
+
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') {
+    e.preventDefault();
+    if (!e.repeat) startPress();
+  } else if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
+    e.preventDefault();
+    if (!e.repeat) { addSpace(); flashBtn($('btnSpace')); }
+  } else if (e.code === 'Backspace') {
+    e.preventDefault();
+    backspace(); flashBtn($('btnDel'));
+  } else if (e.key.toLowerCase() === 'p') {
+    e.preventDefault();
+    playAll(); flashBtn($('btnPlay'));
+  }
+});
+
+window.addEventListener('keyup', (e) => {
+  if (e.code === 'Space') { e.preventDefault(); endPress(); }
+});
+
+btnKey.addEventListener('mousedown', (e) => { e.preventDefault(); startPress(); });
+btnKey.addEventListener('mouseup', endPress);
+btnKey.addEventListener('mouseleave', endPress);
+btnKey.addEventListener('touchstart', (e) => { e.preventDefault(); startPress(); }, { passive: false });
+btnKey.addEventListener('touchend', (e) => { e.preventDefault(); endPress(); });
+btnKey.addEventListener('touchcancel', endPress);
+
+$('btnSpace').addEventListener('click', addSpace);
+$('btnDel').addEventListener('click', backspace);
+$('btnPlay').addEventListener('click', playAll);
+$('btnClear').addEventListener('click', clearAll);
+
+document.querySelectorAll('.node').forEach(node => {
+  node.addEventListener('click', () => {
+    if (buffer) commitLetter();
+    const letter = node.dataset.letter;
+    text += letter;
+    lightUpLetter(letter);
+    render();
+  });
+});
+
+const thresholdInput = $('threshold');
+const thresholdVal = $('thresholdVal');
+thresholdInput.addEventListener('input', () => {
+  DASH_THRESHOLD = parseInt(thresholdInput.value, 10);
+  thresholdVal.textContent = DASH_THRESHOLD + 'ms';
+  updateThresholdMarker();
+});
+
+updateThresholdMarker();
+render();
+</script>
+</body>
+</html>
