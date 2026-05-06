@@ -55,11 +55,7 @@
     gap: 0.4rem;
   }
 
-  /* ── HEADER ── */
-  .header {
-    text-align: center;
-    flex-shrink: 0;
-  }
+  .header { text-align: center; flex-shrink: 0; }
   .header-title {
     font-family: 'Orbitron', monospace;
     font-size: clamp(0.95rem, 3.5vw, 1.3rem);
@@ -74,11 +70,9 @@
     color: rgba(255,255,255,0.85);
     font-size: 0.65rem;
     letter-spacing: 0.2em;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
     margin-top: 0.1rem;
   }
 
-  /* ── MAIN GRID ── */
   .main-grid {
     flex: 1;
     display: grid;
@@ -96,7 +90,6 @@
     body { padding: 0.8rem; }
   }
 
-  /* ── PCB CARD ── */
   .pcb-wrapper {
     width: 100%;
     display: flex;
@@ -115,9 +108,7 @@
     position: relative;
     box-shadow: 0 12px 24px rgba(0,0,0,0.5), inset 0 0 0 1.2px rgba(255,255,255,0.08);
   }
-  @media (min-width: 760px) {
-    .pcb-card { max-width: 280px; }
-  }
+  @media (min-width: 760px) { .pcb-card { max-width: 280px; } }
 
   .pcb-card::before {
     content: '';
@@ -185,7 +176,6 @@
   .silk-dot { fill: rgba(200,212,176,0.4); }
   .antenna { fill: none; stroke: var(--pcb-silk); stroke-width: 1.4; }
 
-  /* ── CONTROLS ── */
   .controls {
     display: flex;
     flex-direction: column;
@@ -194,12 +184,7 @@
     overflow: hidden;
   }
 
-  /* Tabs */
-  .tabs {
-    display: flex;
-    gap: 0.3rem;
-    flex-shrink: 0;
-  }
+  .tabs { display: flex; gap: 0.3rem; flex-shrink: 0; }
   .tab {
     flex: 1;
     padding: 0.4rem 0.5rem;
@@ -209,7 +194,6 @@
     font-family: 'Orbitron', monospace;
     font-weight: 700;
     font-size: 0.7rem;
-    letter-spacing: 0.05em;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.15s;
@@ -221,13 +205,11 @@
     color: var(--dash-color);
   }
 
-  /* Display panel */
   .display-panel {
     background: rgba(13,20,16,0.85);
     border: 1px solid rgba(184,232,74,0.4);
     border-radius: 7px;
     padding: 0.5rem 0.7rem;
-    backdrop-filter: blur(8px);
     flex-shrink: 0;
   }
 
@@ -273,10 +255,7 @@
     -webkit-tap-highlight-color: transparent;
     transition: all 0.15s;
   }
-  .copy-btn:active, .copy-btn.copied {
-    background: var(--dash-color);
-    color: #000;
-  }
+  .copy-btn:active, .copy-btn.copied { background: var(--dash-color); color: #000; }
 
   .current-buf {
     font-family: 'Share Tech Mono', monospace;
@@ -298,7 +277,6 @@
   }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-  /* Translator input mode */
   .translate-input {
     width: 100%;
     background: rgba(13,20,16,0.85);
@@ -311,7 +289,6 @@
     resize: none;
     outline: none;
     flex-shrink: 0;
-    text-shadow: 0 0 4px var(--green-glow);
   }
   .translate-input:focus {
     border-color: var(--dash-color);
@@ -328,7 +305,6 @@
     min-height: 2.5rem;
   }
 
-  /* ── TELEGRAPH KEY ── */
   .telegraph-key {
     width: 100%;
     position: relative;
@@ -339,11 +315,9 @@
     font-family: 'Orbitron', monospace;
     font-weight: 700;
     font-size: 0.8rem;
-    letter-spacing: 0.08em;
     border-radius: 8px;
     cursor: pointer;
     transition: border-color 0.1s, transform 0.05s;
-    backdrop-filter: blur(8px);
     user-select: none;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
@@ -363,7 +337,6 @@
     color: var(--dash-color);
     box-shadow: 0 0 16px var(--green-glow), inset 0 0 14px rgba(184,232,74,0.25);
   }
-
   .key-fill {
     position: absolute;
     left: 0; top: 0; bottom: 0;
@@ -392,7 +365,6 @@
     border-radius: 50%;
     box-shadow: 0 0 6px rgba(255,255,255,0.8);
   }
-
   .telegraph-key .label-row {
     position: relative;
     z-index: 2;
@@ -418,7 +390,6 @@
     margin-top: 1px;
   }
 
-  /* Action buttons */
   .action-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -433,11 +404,9 @@
     font-family: 'Orbitron', monospace;
     font-weight: 700;
     font-size: 0.65rem;
-    letter-spacing: 0.05em;
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.1s;
-    backdrop-filter: blur(8px);
     -webkit-tap-highlight-color: transparent;
     line-height: 1.2;
   }
@@ -475,7 +444,6 @@
     font-size: 0.65rem;
   }
 
-  /* Toast */
   .toast {
     position: fixed;
     bottom: 20px;
@@ -488,7 +456,6 @@
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     z-index: 1000;
     transition: transform 0.3s ease;
@@ -503,7 +470,6 @@
 <body>
 
 <div class="container">
-
   <div class="header">
     <div class="header-title">모스부호 · MORSE CODE</div>
     <div class="header-sub">점과 선으로 말하다</div>
@@ -511,117 +477,125 @@
 
   <div class="main-grid">
 
-    <!-- PCB CARD -->
     <div class="pcb-wrapper">
       <div class="pcb-card">
         <div class="pcb-title"><span>MORSE</span><span>CODE</span></div>
         <svg class="tree" viewBox="0 0 340 460" id="treeSvg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
 
+          <!--
+            LAYOUT:
+            Antenna at center top (170, 30-50)
+            T at x=130 (LEFT TRUNK), E at x=210 (RIGHT TRUNK)
+            Top horizontal: O—M—T (gap with antenna) E—I—S—H
+            Antenna connects diagonally to T and E
+            LEFT TRUNK: T(130) → N(130) → D(130) → B(130)
+            RIGHT TRUNK: E(210) → A(210) → W(210) → J(210)
+          -->
+
           <!-- Antenna -->
           <g class="antenna">
             <polygon points="160,38 180,38 170,22" fill="none"/>
-            <line x1="170" y1="38" x2="170" y2="60"/>
+            <line x1="170" y1="38" x2="170" y2="55"/>
           </g>
 
-          <!-- TOP HORIZONTAL: O—M—T  E—I—S—H -->
-          <line class="trace" x1="50" y1="70" x2="170" y2="70"/>
-          <line class="trace" x1="170" y1="70" x2="170" y2="60"/>
-          <line class="trace" x1="170" y1="60" x2="170" y2="70"/>
-          <line class="trace" x1="170" y1="70" x2="310" y2="70"/>
+          <!-- Antenna diagonals to T and E -->
+          <line class="trace" x1="170" y1="55" x2="130" y2="70"/>
+          <line class="trace" x1="170" y1="55" x2="210" y2="70"/>
 
-          <!-- LEFT TRUNK: T(170,70) → N(170,225) → D(170,335) → B(170,415) — ONE CONTINUOUS LINE -->
-          <line class="trace" x1="170" y1="70" x2="170" y2="415"/>
+          <!-- TOP HORIZONTAL: O—M—T (left side, ends at T) -->
+          <line class="trace" x1="38" y1="70" x2="130" y2="70"/>
+          <!-- TOP HORIZONTAL: E—I—S—H (right side, starts at E) -->
+          <line class="trace" x1="210" y1="70" x2="310" y2="70"/>
 
-          <!-- RIGHT TRUNK: doesn't exist as single line - E goes down separately -->
-          <!-- E(200,70) → goes to A row via diagonal? No - look at original: 
-               E column drops to A position which is right of N -->
-          <!-- Actually the E trunk is: E(200) drops down and connects to A row at y=225 -->
-          <!-- Let me make E trunk: vertical from E(200,70) to A(200,225), then continues to W(200,335), then to J(200,415) -->
-          <line class="trace" x1="200" y1="70" x2="200" y2="415"/>
+          <!-- LEFT TRUNK: T(130,70) → all the way down to B(130,415) -->
+          <line class="trace" x1="130" y1="70" x2="130" y2="415"/>
 
-          <!-- M branch down to G/Q row -->
-          <line class="trace" x1="120" y1="70" x2="120" y2="135"/>
-          <line class="trace" x1="80" y1="135" x2="120" y2="135"/>
-          <line class="trace" x1="120" y1="135" x2="120" y2="180"/>
+          <!-- RIGHT TRUNK: E(210,70) → all the way down to J(210,415) -->
+          <line class="trace" x1="210" y1="70" x2="210" y2="415"/>
 
-          <!-- I branch down to U/V row -->
+          <!-- M branch down to G/Q and Z -->
+          <line class="trace" x1="80" y1="70" x2="80" y2="135"/>
+          <line class="trace" x1="40" y1="135" x2="80" y2="135"/>
+          <line class="trace" x1="80" y1="135" x2="80" y2="180"/>
+
+          <!-- I branch down to U/V and F -->
           <line class="trace" x1="240" y1="70" x2="240" y2="135"/>
           <line class="trace" x1="240" y1="135" x2="278" y2="135"/>
           <line class="trace" x1="240" y1="135" x2="240" y2="180"/>
 
-          <!-- N row horizontal: Y—K—N(left trunk) -->
-          <line class="trace" x1="55" y1="225" x2="170" y2="225"/>
-          <!-- A row horizontal: A(right trunk)—R—L -->
-          <line class="trace" x1="200" y1="225" x2="305" y2="225"/>
+          <!-- N row: Y—K—N (left of trunk) -->
+          <line class="trace" x1="20" y1="225" x2="130" y2="225"/>
+          <!-- A row: A—R—L (right of trunk) -->
+          <line class="trace" x1="210" y1="225" x2="305" y2="225"/>
 
           <!-- K down to C -->
-          <line class="trace" x1="100" y1="225" x2="100" y2="275"/>
+          <line class="trace" x1="62" y1="225" x2="62" y2="275"/>
 
-          <!-- D row horizontal: X—D(left trunk) -->
-          <line class="trace" x1="55" y1="335" x2="170" y2="335"/>
-          <!-- W row horizontal: W(right trunk)—P -->
-          <line class="trace" x1="200" y1="335" x2="285" y2="335"/>
+          <!-- D row: X—D (left of trunk) -->
+          <line class="trace" x1="20" y1="335" x2="130" y2="335"/>
+          <!-- W row: W—P (right of trunk) -->
+          <line class="trace" x1="210" y1="335" x2="290" y2="335"/>
 
           <!-- silk dots -->
           <circle class="silk-dot" cx="290" cy="100" r="1"/>
           <circle class="silk-dot" cx="40" cy="180" r="1"/>
           <circle class="silk-dot" cx="290" cy="270" r="1"/>
           <circle class="silk-dot" cx="40" cy="380" r="1"/>
-          <circle class="silk-dot" cx="270" cy="400" r="1"/>
+          <circle class="silk-dot" cx="170" cy="200" r="1"/>
+          <circle class="silk-dot" cx="170" cy="290" r="1"/>
 
-          <!-- ============ PADS ============ -->
-          <!-- Top row: O M T  E I S H -->
-          <g class="node" data-letter="O"><rect class="pad" x="32" y="58" width="36" height="24" rx="3"/><text x="50" y="71">O</text></g>
-          <g class="node" data-letter="M"><rect class="pad" x="102" y="58" width="36" height="24" rx="3"/><text x="120" y="71">M</text></g>
-          <g class="node" data-letter="T"><rect class="pad" x="152" y="58" width="36" height="24" rx="3"/><text x="170" y="71">T</text></g>
-          <g class="node" data-letter="E"><circle class="pad" cx="200" cy="70" r="13"/><text x="200" y="71">E</text></g>
+          <!-- ===== PADS ===== -->
+
+          <!-- Top row: O—M—T  E—I—S—H -->
+          <g class="node" data-letter="O"><rect class="pad" x="20" y="58" width="36" height="24" rx="3"/><text x="38" y="71">O</text></g>
+          <g class="node" data-letter="M"><rect class="pad" x="62" y="58" width="36" height="24" rx="3"/><text x="80" y="71">M</text></g>
+          <g class="node" data-letter="T"><rect class="pad" x="112" y="58" width="36" height="24" rx="3"/><text x="130" y="71">T</text></g>
+
+          <g class="node" data-letter="E"><circle class="pad" cx="210" cy="70" r="13"/><text x="210" y="71">E</text></g>
           <g class="node" data-letter="I"><circle class="pad" cx="240" cy="70" r="13"/><text x="240" y="71">I</text></g>
           <g class="node" data-letter="S"><circle class="pad" cx="275" cy="70" r="13"/><text x="275" y="71">S</text></g>
           <g class="node" data-letter="H"><circle class="pad" cx="310" cy="70" r="13"/><text x="310" y="71">H</text></g>
 
           <!-- Q—G  /  U—V row -->
-          <g class="node" data-letter="Q"><rect class="pad" x="62" y="123" width="36" height="24" rx="3"/><text x="80" y="136">Q</text></g>
-          <g class="node" data-letter="G"><circle class="pad" cx="120" cy="135" r="13"/><text x="120" y="136">G</text></g>
+          <g class="node" data-letter="Q"><rect class="pad" x="22" y="123" width="36" height="24" rx="3"/><text x="40" y="136">Q</text></g>
+          <g class="node" data-letter="G"><circle class="pad" cx="80" cy="135" r="13"/><text x="80" y="136">G</text></g>
           <g class="node" data-letter="U"><rect class="pad" x="222" y="123" width="36" height="24" rx="3"/><text x="240" y="136">U</text></g>
           <g class="node" data-letter="V"><rect class="pad" x="262" y="123" width="36" height="24" rx="3"/><text x="280" y="136">V</text></g>
 
-          <!-- Z / F row -->
-          <g class="node" data-letter="Z"><circle class="pad" cx="120" cy="180" r="13"/><text x="120" y="181">Z</text></g>
+          <!-- Z / F -->
+          <g class="node" data-letter="Z"><circle class="pad" cx="80" cy="180" r="13"/><text x="80" y="181">Z</text></g>
           <g class="node" data-letter="F"><circle class="pad" cx="240" cy="180" r="13"/><text x="240" y="181">F</text></g>
 
           <!-- N row: Y K N | A R L -->
-          <g class="node" data-letter="Y"><rect class="pad" x="37" y="213" width="36" height="24" rx="3"/><text x="55" y="226">Y</text></g>
-          <g class="node" data-letter="K"><rect class="pad" x="82" y="213" width="36" height="24" rx="3"/><text x="100" y="226">K</text></g>
-          <g class="node" data-letter="N"><circle class="pad" cx="170" cy="225" r="13"/><text x="170" y="226">N</text></g>
-          <g class="node" data-letter="A"><rect class="pad" x="182" y="213" width="36" height="24" rx="3"/><text x="200" y="226">A</text></g>
-          <g class="node" data-letter="R"><circle class="pad" cx="245" cy="225" r="13"/><text x="245" y="226">R</text></g>
+          <g class="node" data-letter="Y"><rect class="pad" x="2" y="213" width="36" height="24" rx="3"/><text x="20" y="226">Y</text></g>
+          <g class="node" data-letter="K"><rect class="pad" x="44" y="213" width="36" height="24" rx="3"/><text x="62" y="226">K</text></g>
+          <g class="node" data-letter="N"><circle class="pad" cx="130" cy="225" r="13"/><text x="130" y="226">N</text></g>
+          <g class="node" data-letter="A"><rect class="pad" x="192" y="213" width="36" height="24" rx="3"/><text x="210" y="226">A</text></g>
+          <g class="node" data-letter="R"><circle class="pad" cx="255" cy="225" r="13"/><text x="255" y="226">R</text></g>
           <g class="node" data-letter="L"><circle class="pad" cx="290" cy="225" r="13"/><text x="290" y="226">L</text></g>
 
           <!-- C below K -->
-          <g class="node" data-letter="C"><circle class="pad" cx="100" cy="275" r="13"/><text x="100" y="276">C</text></g>
+          <g class="node" data-letter="C"><circle class="pad" cx="62" cy="275" r="13"/><text x="62" y="276">C</text></g>
 
           <!-- D row: X D | W P -->
-          <g class="node" data-letter="X"><rect class="pad" x="37" y="323" width="36" height="24" rx="3"/><text x="55" y="336">X</text></g>
-          <g class="node" data-letter="D"><circle class="pad" cx="170" cy="335" r="13"/><text x="170" y="336">D</text></g>
-          <g class="node" data-letter="W"><rect class="pad" x="182" y="323" width="36" height="24" rx="3"/><text x="200" y="336">W</text></g>
-          <g class="node" data-letter="P"><circle class="pad" cx="285" cy="335" r="13"/><text x="285" y="336">P</text></g>
+          <g class="node" data-letter="X"><rect class="pad" x="2" y="323" width="36" height="24" rx="3"/><text x="20" y="336">X</text></g>
+          <g class="node" data-letter="D"><circle class="pad" cx="130" cy="335" r="13"/><text x="130" y="336">D</text></g>
+          <g class="node" data-letter="W"><rect class="pad" x="192" y="323" width="36" height="24" rx="3"/><text x="210" y="336">W</text></g>
+          <g class="node" data-letter="P"><circle class="pad" cx="290" cy="335" r="13"/><text x="290" y="336">P</text></g>
 
           <!-- B (left trunk end) | J (right trunk end) -->
-          <g class="node" data-letter="B"><circle class="pad" cx="170" cy="415" r="13"/><text x="170" y="416">B</text></g>
-          <g class="node" data-letter="J"><rect class="pad" x="182" y="403" width="36" height="24" rx="3"/><text x="200" y="416">J</text></g>
+          <g class="node" data-letter="B"><circle class="pad" cx="130" cy="415" r="13"/><text x="130" y="416">B</text></g>
+          <g class="node" data-letter="J"><rect class="pad" x="192" y="403" width="36" height="24" rx="3"/><text x="210" y="416">J</text></g>
         </svg>
       </div>
     </div>
 
-    <!-- ============ CONTROLS ============ -->
     <div class="controls">
-
       <div class="tabs">
         <button class="tab active" data-tab="key">전신키 입력</button>
         <button class="tab" data-tab="trans">통역기</button>
       </div>
 
-      <!-- TAB: KEY -->
       <div class="tab-content active" id="tab-key">
         <div class="display-panel">
           <div class="io-row">
@@ -663,12 +637,9 @@
         </div>
       </div>
 
-      <!-- TAB: TRANSLATE -->
       <div class="tab-content" id="tab-trans">
         <div class="display-panel">
-          <div class="io-row">
-            <span class="io-label" style="font-size:0.55rem">텍스트 → 모스</span>
-          </div>
+          <div class="io-row"><span class="io-label" style="font-size:0.55rem">텍스트 → 모스</span></div>
         </div>
         <textarea class="translate-input" id="textToMorse" rows="2" placeholder="HELLO WORLD"></textarea>
         <div class="translate-result">
@@ -679,9 +650,7 @@
         </div>
 
         <div class="display-panel">
-          <div class="io-row">
-            <span class="io-label" style="font-size:0.55rem">모스 → 텍스트</span>
-          </div>
+          <div class="io-row"><span class="io-label" style="font-size:0.55rem">모스 → 텍스트</span></div>
         </div>
         <textarea class="translate-input" id="morseToText" rows="2" placeholder=".... . .-.. .-.. ---  / .-- --- .-. .-.. -.."></textarea>
         <div class="translate-result">
@@ -696,9 +665,7 @@
           <button class="key-btn" id="btnClearTrans">초기화</button>
         </div>
       </div>
-
     </div>
-
   </div>
 </div>
 
@@ -718,8 +685,7 @@ const MORSE = {
 };
 const FROM_MORSE = Object.fromEntries(Object.entries(MORSE).map(([l, m]) => [m, l]));
 
-let buffer = '';
-let text = '';
+let buffer = '', text = '';
 let commitTimer = null;
 const COMMIT_DELAY = 1200;
 let DASH_THRESHOLD = 200;
@@ -727,7 +693,6 @@ const MAX_PRESS_DISPLAY = 600;
 
 const $ = id => document.getElementById(id);
 
-// ── Audio ──
 let audioCtx = null;
 function getAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -770,15 +735,10 @@ function beep(start, dur, freq = 600, vol = 0.25) {
   gain.gain.linearRampToValueAtTime(vol, start + 0.005);
   gain.gain.setValueAtTime(vol, start + dur / 1000 - 0.005);
   gain.gain.linearRampToValueAtTime(0, start + dur / 1000);
-  osc.start(start);
-  osc.stop(start + dur / 1000);
+  osc.start(start); osc.stop(start + dur / 1000);
 }
-function clickSound() {
-  const ctx = getAudio();
-  beep(ctx.currentTime, 35, 880, 0.12);
-}
+function clickSound() { const ctx = getAudio(); beep(ctx.currentTime, 35, 880, 0.12); }
 
-// ── Translation helpers ──
 function textToMorse(t) {
   return t.toUpperCase().split('').map(c => {
     if (c === ' ') return '/';
@@ -792,7 +752,6 @@ function morseToText(m) {
   }).join('');
 }
 
-// ── Render (key tab) ──
 function render() {
   $('currentBuf').textContent = buffer.replace(/\./g, '·').replace(/-/g, '─');
   $('textOut').textContent = text || '\u00a0';
@@ -853,13 +812,11 @@ function clearAll() {
   clickSound();
 }
 
-// ── Playback ──
 function playMorseString(morseStr, onLetter) {
   if (!morseStr) return;
   const ctx = getAudio();
   const DOT = 90, DASH = DOT * 3, GAP = DOT, LETTER_GAP = DOT * 3, WORD_GAP = DOT * 7;
   let t = ctx.currentTime + 0.05;
-
   morseStr.split(' ').forEach(code => {
     if (code === '/' || code === '') { t += WORD_GAP / 1000; return; }
     if (onLetter) {
@@ -887,7 +844,6 @@ function flashBtn(btn) {
   setTimeout(() => btn.classList.remove('pressed'), 120);
 }
 
-// ── Telegraph key ──
 const btnKey = $('btnKey');
 const keyFill = $('keyFill');
 const symPreview = $('symPreview');
@@ -898,7 +854,6 @@ function updateThresholdMarker() {
   const pct = (DASH_THRESHOLD / MAX_PRESS_DISPLAY) * 100;
   $('keyThreshold').style.left = Math.min(pct, 98) + '%';
 }
-
 function startPress() {
   if (pressStartTime > 0) return;
   pressStartTime = performance.now();
@@ -908,7 +863,6 @@ function startPress() {
   startLiveTone();
   tickPress();
 }
-
 function tickPress() {
   if (pressStartTime === 0) return;
   const elapsed = performance.now() - pressStartTime;
@@ -920,7 +874,6 @@ function tickPress() {
   }
   rafId = requestAnimationFrame(tickPress);
 }
-
 function endPress() {
   if (pressStartTime === 0) return;
   const duration = performance.now() - pressStartTime;
@@ -934,27 +887,20 @@ function endPress() {
   else addSymbol('-');
 }
 
-// ── Toast ──
 function showToast(msg) {
   const t = $('toast');
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 1500);
 }
-
-// ── Copy ──
 async function copyToClipboard(str, btn) {
-  if (!str || str.trim() === '') {
-    showToast('복사할 내용이 없습니다');
-    return;
-  }
+  if (!str || str.trim() === '') { showToast('복사할 내용이 없습니다'); return; }
   try {
     await navigator.clipboard.writeText(str);
     btn.classList.add('copied');
     setTimeout(() => btn.classList.remove('copied'), 800);
     showToast('복사됨');
   } catch (e) {
-    // fallback
     const ta = document.createElement('textarea');
     ta.value = str; document.body.appendChild(ta);
     ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
@@ -962,9 +908,7 @@ async function copyToClipboard(str, btn) {
   }
 }
 
-// ── Keyboard ──
 window.addEventListener('keydown', (e) => {
-  // Skip if focus on textarea
   if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
   if (e.code === 'Space') {
     e.preventDefault();
@@ -980,7 +924,6 @@ window.addEventListener('keydown', (e) => {
     playAll(); flashBtn($('btnPlay'));
   }
 });
-
 window.addEventListener('keyup', (e) => {
   if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
   if (e.code === 'Space') { e.preventDefault(); endPress(); }
@@ -1000,7 +943,6 @@ $('btnDel').addEventListener('click', backspace);
 $('btnPlay').addEventListener('click', () => { playAll(); });
 $('btnClear').addEventListener('click', clearAll);
 
-// PCB pad clicks
 document.querySelectorAll('.node').forEach(node => {
   node.addEventListener('click', () => {
     if (buffer) commitLetter();
@@ -1011,18 +953,15 @@ document.querySelectorAll('.node').forEach(node => {
   });
 });
 
-// Sensitivity
 $('threshold').addEventListener('input', () => {
   DASH_THRESHOLD = parseInt($('threshold').value, 10);
   $('thresholdVal').textContent = DASH_THRESHOLD + 'ms';
   updateThresholdMarker();
 });
 
-// Copy buttons (key tab)
 $('copyText').addEventListener('click', () => copyToClipboard(text, $('copyText')));
 $('copyMorse').addEventListener('click', () => copyToClipboard(textToMorse(text), $('copyMorse')));
 
-// ── Tabs ──
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1032,24 +971,18 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-// ── Translator ──
 const t2m = $('textToMorse');
 const m2t = $('morseToText');
 const t2mRes = $('textToMorseResult');
 const m2tRes = $('morseToTextResult');
 
-t2m.addEventListener('input', () => {
-  t2mRes.textContent = textToMorse(t2m.value) || '\u00a0';
-});
-m2t.addEventListener('input', () => {
-  m2tRes.textContent = morseToText(m2t.value) || '\u00a0';
-});
+t2m.addEventListener('input', () => { t2mRes.textContent = textToMorse(t2m.value) || '\u00a0'; });
+m2t.addEventListener('input', () => { m2tRes.textContent = morseToText(m2t.value) || '\u00a0'; });
 
 $('copyT2M').addEventListener('click', () => copyToClipboard(t2mRes.textContent.trim(), $('copyT2M')));
 $('copyM2T').addEventListener('click', () => copyToClipboard(m2tRes.textContent.trim(), $('copyM2T')));
 
 $('btnPlayTrans').addEventListener('click', () => {
-  // Play whichever side has content
   const morse = t2m.value ? textToMorse(t2m.value) : m2t.value;
   if (morse) playMorseString(morse, lightUpLetter);
 });
