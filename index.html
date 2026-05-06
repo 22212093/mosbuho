@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>MORSE CODE — 점과 선으로 말하다</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>모스부호 · MORSE CODE</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+KR:wght@400;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -12,7 +12,7 @@
     --bg-grass: #6ab02e;
     --bg-grass-dark: #3a6b1a;
     --pcb-bg: #0d1410;
-    --pcb-pad: #5a7a3a;
+    --pcb-pad: #4a6a2a;
     --pcb-pad-bright: #b8e84a;
     --pcb-trace: #c8d4b0;
     --pcb-silk: #e8e8d8;
@@ -21,23 +21,24 @@
     --dash-color: #b8e84a;
   }
 
-  html, body { height: 100%; }
+  html, body { height: 100%; overflow: hidden; }
   body {
     background: radial-gradient(ellipse at center, var(--bg-grass) 0%, var(--bg-grass-dark) 70%, #1a3a08 100%);
-    min-height: 100vh;
     font-family: 'Noto Sans KR', sans-serif;
     color: #fff;
-    overflow-x: hidden;
-    padding: 1rem 0.8rem;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
   }
 
   body::before {
     content: '';
     position: fixed; inset: 0;
     background:
-      radial-gradient(circle at 20% 30%, rgba(255,255,180,0.15) 0%, transparent 40%),
-      radial-gradient(circle at 80% 70%, rgba(60,120,30,0.4) 0%, transparent 50%),
-      radial-gradient(circle at 50% 100%, rgba(20,50,10,0.5) 0%, transparent 60%);
+      radial-gradient(circle at 20% 30%, rgba(255,255,180,0.12) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(60,120,30,0.35) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
   }
@@ -45,83 +46,94 @@
   .container {
     position: relative;
     z-index: 1;
-    max-width: 920px;
+    width: 100%;
+    height: 100%;
+    max-width: 1100px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 0.4rem;
   }
 
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    flex-shrink: 0;
+  }
   .header-title {
     font-family: 'Orbitron', monospace;
-    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    font-size: clamp(0.95rem, 3.5vw, 1.3rem);
     font-weight: 800;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     color: #fff;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
-    margin: 0.3rem 0 0.2rem;
-    text-align: center;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    line-height: 1.1;
   }
   .header-sub {
     font-family: 'Share Tech Mono', monospace;
     color: rgba(255,255,255,0.85);
-    font-size: 0.75rem;
-    letter-spacing: 0.25em;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
-    margin-bottom: 1rem;
-    text-align: center;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    margin-top: 0.1rem;
   }
 
+  /* ── MAIN GRID ── */
   .main-grid {
+    flex: 1;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.2rem;
-    width: 100%;
-    align-items: start;
-    justify-items: center;
+    gap: 0.5rem;
+    min-height: 0;
+    overflow: hidden;
   }
 
   @media (min-width: 760px) {
     .main-grid {
-      grid-template-columns: 300px 1fr;
-      max-width: 800px;
-      gap: 1.5rem;
+      grid-template-columns: minmax(220px, 280px) 1fr;
+      gap: 0.8rem;
     }
-    body { padding: 1.5rem; }
+    body { padding: 0.8rem; }
   }
 
-  .pcb-wrapper { perspective: 1200px; width: 100%; display: flex; justify-content: center; }
+  /* ── PCB CARD ── */
+  .pcb-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 0;
+  }
   .pcb-card {
     width: 100%;
-    max-width: 280px;
+    max-width: 250px;
     aspect-ratio: 5 / 7;
+    max-height: 100%;
     background: var(--pcb-bg);
-    border-radius: 14px;
-    padding: 16px 14px 14px;
+    border-radius: 12px;
+    padding: 10px 8px 8px;
     position: relative;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 6px 12px rgba(0,0,0,0.4), inset 0 0 0 1.5px rgba(255,255,255,0.08);
-    transform: rotateX(2deg);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.5), inset 0 0 0 1.2px rgba(255,255,255,0.08);
   }
   @media (min-width: 760px) {
-    .pcb-card { max-width: 300px; }
+    .pcb-card { max-width: 280px; }
   }
 
   .pcb-card::before {
     content: '';
     position: absolute;
-    top: 10px; right: 10px;
-    width: 16px; height: 16px;
+    top: 8px; right: 8px;
+    width: 13px; height: 13px;
     border-radius: 50%;
     background: radial-gradient(circle, transparent 40%, rgba(200,212,176,0.4) 50%, transparent 60%);
-    border: 1.5px solid rgba(200,212,176,0.5);
-    box-shadow: inset 0 0 4px rgba(0,0,0,0.8);
+    border: 1.2px solid rgba(200,212,176,0.5);
   }
   .pcb-card::after {
     content: '';
     position: absolute;
-    right: -3px;
+    right: -2px;
     top: 30%;
-    width: 5px;
+    width: 4px;
     height: 40%;
     background: linear-gradient(to bottom,
       transparent 0%, transparent 8%, var(--pcb-pad) 8%, var(--pcb-pad) 18%,
@@ -131,33 +143,39 @@
       transparent 90%);
     border-radius: 2px;
   }
+
   .pcb-title {
     display: flex;
     justify-content: space-between;
     font-family: 'Orbitron', monospace;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     color: var(--pcb-silk);
     letter-spacing: 0.12em;
     padding: 0 4px;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
-  svg.tree { width: 100%; height: auto; display: block; }
+  svg.tree {
+    width: 100%;
+    height: calc(100% - 18px);
+    display: block;
+  }
+
   .node { cursor: pointer; }
   .node .pad {
     fill: var(--pcb-pad);
     stroke: var(--pcb-trace);
-    stroke-width: 1.2;
+    stroke-width: 1;
     transition: fill 0.1s, filter 0.1s;
   }
   .node.lit .pad {
     fill: var(--pcb-pad-bright);
-    filter: drop-shadow(0 0 6px var(--green-glow)) drop-shadow(0 0 12px var(--green-glow));
+    filter: drop-shadow(0 0 5px var(--green-glow)) drop-shadow(0 0 10px var(--green-glow));
   }
   .node text {
     fill: var(--pcb-silk);
     font-family: 'Orbitron', monospace;
-    font-size: 9px;
+    font-size: 16px;
     font-weight: 700;
     text-anchor: middle;
     dominant-baseline: central;
@@ -167,103 +185,183 @@
   .silk-dot { fill: rgba(200,212,176,0.4); }
   .antenna { fill: none; stroke: var(--pcb-silk); stroke-width: 1.4; }
 
+  /* ── CONTROLS ── */
   .controls {
-    width: 100%;
-    max-width: 460px;
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
-  }
-  @media (min-width: 760px) {
-    .controls { max-width: none; }
+    gap: 0.4rem;
+    min-height: 0;
+    overflow: hidden;
   }
 
-  .input-display {
-    width: 100%;
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0.3rem;
+    flex-shrink: 0;
+  }
+  .tab {
+    flex: 1;
+    padding: 0.4rem 0.5rem;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    background: rgba(13,20,16,0.5);
+    color: rgba(255,255,255,0.7);
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tab.active {
+    background: rgba(184,232,74,0.2);
+    border-color: var(--dash-color);
+    color: var(--dash-color);
+  }
+
+  /* Display panel */
+  .display-panel {
     background: rgba(13,20,16,0.85);
     border: 1px solid rgba(184,232,74,0.4);
-    border-radius: 8px;
-    padding: 0.7rem 0.9rem;
+    border-radius: 7px;
+    padding: 0.5rem 0.7rem;
     backdrop-filter: blur(8px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    flex-shrink: 0;
   }
-  .input-row {
+
+  .io-row {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     gap: 0.5rem;
+    min-height: 1.4rem;
   }
-  .input-row + .input-row { margin-top: 0.2rem; }
-  .input-label {
+  .io-row + .io-row { margin-top: 0.25rem; }
+  .io-label {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: rgba(184,232,74,0.7);
     letter-spacing: 0.2em;
     flex-shrink: 0;
   }
-  .input-value {
+  .io-value {
     font-family: 'Share Tech Mono', monospace;
     color: #b8e84a;
-    text-shadow: 0 0 8px var(--green-glow);
-    font-size: 1.05rem;
-    letter-spacing: 0.15em;
-    min-height: 1.3em;
-    word-break: break-all;
+    text-shadow: 0 0 6px var(--green-glow);
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+    flex: 1;
     text-align: right;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     line-height: 1.3;
   }
-  .current-input {
+  .copy-btn {
+    background: transparent;
+    border: 1px solid rgba(184,232,74,0.4);
+    color: rgba(184,232,74,0.8);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    cursor: pointer;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+    transition: all 0.15s;
+  }
+  .copy-btn:active, .copy-btn.copied {
+    background: var(--dash-color);
+    color: #000;
+  }
+
+  .current-buf {
     font-family: 'Share Tech Mono', monospace;
     color: #ffd84a;
-    font-size: 1.3rem;
-    letter-spacing: 0.3em;
-    text-shadow: 0 0 8px rgba(255,216,74,0.6);
-    min-height: 1.4em;
+    font-size: 1rem;
+    letter-spacing: 0.25em;
+    text-shadow: 0 0 6px rgba(255,216,74,0.6);
+    min-height: 1.3em;
     text-align: center;
-    border-top: 1px dashed rgba(184,232,74,0.3);
-    padding-top: 0.5rem;
-    margin-top: 0.4rem;
+    border-top: 1px dashed rgba(184,232,74,0.25);
+    padding-top: 0.3rem;
+    margin-top: 0.3rem;
   }
-  .current-input::after {
+  .current-buf::after {
     content: '▌';
     color: #ffd84a;
-    margin-left: 4px;
+    margin-left: 3px;
     animation: blink 0.8s step-end infinite;
   }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
+  /* Translator input mode */
+  .translate-input {
+    width: 100%;
+    background: rgba(13,20,16,0.85);
+    border: 1px solid rgba(184,232,74,0.4);
+    color: #b8e84a;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 6px;
+    resize: none;
+    outline: none;
+    flex-shrink: 0;
+    text-shadow: 0 0 4px var(--green-glow);
+  }
+  .translate-input:focus {
+    border-color: var(--dash-color);
+    box-shadow: 0 0 8px rgba(184,232,74,0.3);
+  }
+  .translate-input::placeholder { color: rgba(184,232,74,0.4); }
+
+  .translate-result {
+    background: rgba(13,20,16,0.85);
+    border: 1px solid rgba(184,232,74,0.4);
+    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    flex-shrink: 0;
+    min-height: 2.5rem;
+  }
+
+  /* ── TELEGRAPH KEY ── */
   .telegraph-key {
     width: 100%;
     position: relative;
-    padding: 1.1rem 1rem;
+    padding: 0.7rem 0.8rem;
     border: 2px solid rgba(255,255,255,0.4);
     background: rgba(13,20,16,0.7);
     color: #fff;
     font-family: 'Orbitron', monospace;
     font-weight: 700;
-    font-size: 0.95rem;
-    letter-spacing: 0.1em;
-    border-radius: 10px;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    border-radius: 8px;
     cursor: pointer;
     transition: border-color 0.1s, transform 0.05s;
     backdrop-filter: blur(8px);
     user-select: none;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
     overflow: hidden;
     touch-action: none;
+    flex-shrink: 0;
   }
   .telegraph-key.pressing {
-    transform: translateY(2px);
+    transform: translateY(1px);
     border-color: var(--dot-color);
     color: var(--dot-color);
-    box-shadow: 0 0 16px rgba(255,216,74,0.4), inset 0 0 12px rgba(255,216,74,0.15);
+    box-shadow: 0 0 12px rgba(255,216,74,0.4), inset 0 0 10px rgba(255,216,74,0.15);
   }
   .telegraph-key.pressing.is-dash {
     border-color: var(--dash-color);
     color: var(--dash-color);
-    box-shadow: 0 0 20px var(--green-glow), inset 0 0 16px rgba(184,232,74,0.25);
+    box-shadow: 0 0 16px var(--green-glow), inset 0 0 14px rgba(184,232,74,0.25);
   }
 
   .key-fill {
@@ -282,7 +380,6 @@
     top: 0; bottom: 0;
     width: 2px;
     background: rgba(255,255,255,0.5);
-    box-shadow: 0 0 6px rgba(255,255,255,0.6);
     pointer-events: none;
     z-index: 1;
   }
@@ -293,324 +390,331 @@
     width: 8px; height: 8px;
     background: #fff;
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(255,255,255,0.8);
+    box-shadow: 0 0 6px rgba(255,255,255,0.8);
   }
 
   .telegraph-key .label-row {
     position: relative;
     z-index: 2;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.2rem;
+    justify-content: center;
+    gap: 0.6rem;
   }
   .telegraph-key .symbol-preview {
-    font-size: 1.7rem;
+    font-size: 1.4rem;
     line-height: 1;
-    min-height: 1.7rem;
     transition: opacity 0.1s, transform 0.1s;
     opacity: 0.4;
   }
-  .telegraph-key.pressing .symbol-preview { opacity: 1; transform: scale(1.2); }
-  .telegraph-key .key-label { font-size: 0.85rem; }
+  .telegraph-key.pressing .symbol-preview { opacity: 1; transform: scale(1.15); }
+  .telegraph-key .key-text { display: flex; flex-direction: column; align-items: flex-start; }
+  .telegraph-key .key-label { font-size: 0.75rem; }
   .telegraph-key .hint {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     color: rgba(255,255,255,0.6);
     letter-spacing: 0.1em;
     font-family: 'Share Tech Mono', monospace;
-    margin-top: 0.1rem;
+    margin-top: 1px;
   }
 
+  /* Action buttons */
   .action-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 0.4rem;
+    gap: 0.3rem;
+    flex-shrink: 0;
   }
   .key-btn {
-    padding: 0.65rem 0.4rem;
+    padding: 0.5rem 0.3rem;
     border: 1.5px solid rgba(255,255,255,0.4);
     background: rgba(13,20,16,0.7);
     color: #fff;
     font-family: 'Orbitron', monospace;
     font-weight: 700;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     letter-spacing: 0.05em;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
     transition: all 0.1s;
     backdrop-filter: blur(8px);
-    user-select: none;
-    -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
     line-height: 1.2;
   }
   .key-btn:active, .key-btn.pressed {
-    transform: translateY(1px);
     background: rgba(184,232,74,0.3);
-    border-color: #b8e84a;
-    color: #b8e84a;
-    box-shadow: 0 0 12px var(--green-glow);
+    border-color: var(--dash-color);
+    color: var(--dash-color);
   }
   .key-btn .hint {
     display: block;
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     color: rgba(255,255,255,0.5);
-    margin-top: 2px;
-    letter-spacing: 0.1em;
+    margin-top: 1px;
     font-family: 'Share Tech Mono', monospace;
   }
 
   .sensitivity {
-    width: 100%;
     background: rgba(13,20,16,0.7);
     border: 1px solid rgba(184,232,74,0.3);
-    border-radius: 6px;
-    padding: 0.5rem 0.8rem;
-    backdrop-filter: blur(8px);
+    border-radius: 5px;
+    padding: 0.35rem 0.6rem;
     display: flex;
     align-items: center;
-    gap: 0.7rem;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.85);
-  }
-  .sensitivity label { letter-spacing: 0.1em; white-space: nowrap; }
-  .sensitivity input[type=range] { flex: 1; accent-color: var(--dash-color); min-width: 0; }
-  .sensitivity .val {
-    color: var(--dash-color);
-    min-width: 55px;
-    text-align: right;
-    text-shadow: 0 0 6px var(--green-glow);
-    font-size: 0.75rem;
-  }
-
-  .helper-text {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.65rem;
-    color: rgba(255,255,255,0.7);
-    text-align: center;
-    letter-spacing: 0.05em;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
-    line-height: 1.6;
-  }
-  .helper-text kbd {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 3px;
-    padding: 1px 5px;
-    font-family: inherit;
-    color: #fff;
-    margin: 0 1px;
-    font-size: 0.65rem;
-  }
-  .helper-text .dot-color { color: var(--dot-color); font-weight: bold; }
-  .helper-text .dash-color { color: var(--dash-color); font-weight: bold; }
-
-  footer {
+    gap: 0.5rem;
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.6rem;
-    color: rgba(255,255,255,0.5);
-    letter-spacing: 0.15em;
-    padding: 1rem 0 0.5rem;
-    text-align: center;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    color: rgba(255,255,255,0.85);
+    flex-shrink: 0;
   }
+  .sensitivity input[type=range] { flex: 1; accent-color: var(--dash-color); min-width: 0; height: 14px; }
+  .sensitivity .val {
+    color: var(--dash-color);
+    min-width: 42px;
+    text-align: right;
+    font-size: 0.65rem;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(184,232,74,0.95);
+    color: #0d1410;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  .tab-content { display: none; flex-direction: column; gap: 0.4rem; min-height: 0; }
+  .tab-content.active { display: flex; }
 </style>
 </head>
 <body>
 
 <div class="container">
 
-<div class="header-title">모스부호 · MORSE CODE</div>
-<div class="header-sub">점과 선으로 말하다</div>
-
-<div class="main-grid">
-
-  <div class="pcb-wrapper">
-    <div class="pcb-card" id="pcbCard">
-      <div class="pcb-title"><span>MORSE</span><span>CODE</span></div>
-
-      <!--
-        Layout based on photo (corrected):
-        - Antenna at top center
-        - LEFT (dash branch from T):  O-M-T row → trunk down → G/Q row → Z → K/Y row → N → C row → D row(X-D) → B → A row goes to W → J,P
-        - Wait - re-reading: T trunk goes DOWN. From T: M(--), O(---), G(--.), Q(--.-), Z(--..)
-        - From E (right): I(..), S(...), H(....), U(..-), V(...-), F(..-.)
-        - The middle area: A is .- (E·dash), R is .-., L is .-..
-                            N is -. (T·dot), K is -.-, C is -.-., Y is -.--
-                            D is -.., X is -..-, B is -..., 
-                            W is .-- (E·dash·dash), J is .---, P is .--.
-        
-        So W is reached from A (.-) by adding another dash: .--
-        In the photo W appears below A's row, which makes sense — W is A's dash child.
-      -->
-
-      <svg class="tree" viewBox="0 0 340 460" id="treeSvg" xmlns="http://www.w3.org/2000/svg">
-        <!-- Antenna at top center -->
-        <g class="antenna">
-          <line x1="170" y1="22" x2="170" y2="50"/>
-          <polygon points="160,22 180,22 170,8" fill="none" stroke="#e8e8d8" stroke-width="1.4"/>
-          <line x1="167" y1="14" x2="173" y2="14"/>
-        </g>
-
-        <!-- ===== TRACES ===== -->
-        <!-- Top horizontal: O—M—T  |  E—I—S—H -->
-        <line class="trace" x1="40" y1="60" x2="155" y2="60"/>
-        <line class="trace" x1="185" y1="60" x2="310" y2="60"/>
-
-        <!-- Antenna stem branches: down to T (dash side trunk) and to E (dot side trunk) -->
-        <line class="trace" x1="170" y1="50" x2="155" y2="60"/>
-        <line class="trace" x1="170" y1="50" x2="185" y2="60"/>
-
-        <!-- LEFT TRUNK: T (155,60) goes down through the whole left side -->
-        <line class="trace" x1="155" y1="68" x2="155" y2="395"/>
-
-        <!-- Row 2 left: M down to G, Q -->
-        <line class="trace" x1="115" y1="68" x2="115" y2="120"/>
-        <line class="trace" x1="65"  y1="120" x2="115" y2="120"/>
-        <!-- G down to Z -->
-        <line class="trace" x1="115" y1="120" x2="115" y2="170"/>
-
-        <!-- Row 4 left: T trunk to N row, with Y-K branches -->
-        <line class="trace" x1="40"  y1="225" x2="155" y2="225"/>
-        <!-- K down to C -->
-        <line class="trace" x1="100" y1="225" x2="100" y2="275"/>
-
-        <!-- Row 6 left: T trunk to D row, X-D-W -->
-        <line class="trace" x1="50"  y1="315" x2="155" y2="315"/>
-        <!-- D down to B -->
-        <line class="trace" x1="115" y1="315" x2="115" y2="370"/>
-
-        <!-- ===== RIGHT TRUNK: E down ===== -->
-        <line class="trace" x1="200" y1="68" x2="200" y2="225"/>
-
-        <!-- I down to U, S down to V -->
-        <line class="trace" x1="240" y1="68" x2="240" y2="120"/>
-        <line class="trace" x1="275" y1="68" x2="275" y2="120"/>
-        <!-- U down to F -->
-        <line class="trace" x1="240" y1="120" x2="240" y2="170"/>
-
-        <!-- A row: E trunk → A (dash child of E) → R, L -->
-        <line class="trace" x1="200" y1="225" x2="285" y2="225"/>
-
-        <!-- A (.-) down to W (.--) — this is the key correction: W is A's dash child -->
-        <line class="trace" x1="220" y1="232" x2="220" y2="320"/>
-        <!-- W (.--) row: → J (dash child, .---), → P (dot child, .--.) -->
-        <line class="trace" x1="200" y1="360" x2="280" y2="360"/>
-        <!-- W down to J -->
-        <line class="trace" x1="220" y1="360" x2="220" y2="395"/>
-
-        <!-- silk decorative dots -->
-        <circle class="silk-dot" cx="320" cy="100" r="1"/>
-        <circle class="silk-dot" cx="22"  cy="170" r="1"/>
-        <circle class="silk-dot" cx="320" cy="180" r="1"/>
-        <circle class="silk-dot" cx="22"  cy="280" r="1"/>
-        <circle class="silk-dot" cx="170" cy="160" r="1"/>
-        <circle class="silk-dot" cx="170" cy="195" r="1"/>
-        <circle class="silk-dot" cx="80"  cy="380" r="1"/>
-        <circle class="silk-dot" cx="300" cy="380" r="1"/>
-
-        <!-- ===== NODES ===== -->
-        <!-- TOP ROW: O M T  E I S H -->
-        <g class="node" data-letter="O"><rect class="pad" x="20" y="52" width="32" height="16" rx="2"/><text x="60" y="76">O</text></g>
-        <g class="node" data-letter="M"><rect class="pad" x="95" y="52" width="32" height="16" rx="2"/><text x="135" y="76">M</text></g>
-        <g class="node" data-letter="T"><rect class="pad" x="143" y="52" width="24" height="16" rx="2"/><text x="175" y="76">T</text></g>
-        <g class="node" data-letter="E"><circle class="pad" cx="200" cy="60" r="8"/><text x="200" y="78">E</text></g>
-        <g class="node" data-letter="I"><circle class="pad" cx="240" cy="60" r="8"/><text x="240" y="78">I</text></g>
-        <g class="node" data-letter="S"><circle class="pad" cx="275" cy="60" r="8"/><text x="275" y="78">S</text></g>
-        <g class="node" data-letter="H"><circle class="pad" cx="310" cy="60" r="8"/><text x="310" y="78">H</text></g>
-
-        <!-- ROW 2: Q — G | U — V -->
-        <g class="node" data-letter="Q"><rect class="pad" x="45" y="112" width="24" height="16" rx="2"/><text x="40" y="142">Q</text></g>
-        <g class="node" data-letter="G"><circle class="pad" cx="115" cy="120" r="8"/><text x="135" y="124">G</text></g>
-        <g class="node" data-letter="U"><rect class="pad" x="228" y="112" width="24" height="16" rx="2"/><text x="225" y="142">U</text></g>
-        <g class="node" data-letter="V"><rect class="pad" x="263" y="112" width="24" height="16" rx="2"/><text x="295" y="124">V</text></g>
-
-        <!-- ROW 3: Z | F -->
-        <g class="node" data-letter="Z"><circle class="pad" cx="115" cy="170" r="8"/><text x="130" y="186">Z</text></g>
-        <g class="node" data-letter="F"><circle class="pad" cx="240" cy="170" r="8"/><text x="258" y="174">F</text></g>
-
-        <!-- ROW 4: Y — K — N | A — R — L -->
-        <g class="node" data-letter="Y"><rect class="pad" x="20" y="217" width="24" height="16" rx="2"/><text x="58" y="225">Y</text></g>
-        <g class="node" data-letter="K"><rect class="pad" x="80" y="217" width="24" height="16" rx="2"/><text x="78" y="246">K</text></g>
-        <g class="node" data-letter="N"><circle class="pad" cx="155" cy="225" r="8"/><text x="173" y="244">N</text></g>
-        <g class="node" data-letter="A"><rect class="pad" x="208" y="217" width="24" height="16" rx="2"/><text x="195" y="244">A</text></g>
-        <g class="node" data-letter="R"><circle class="pad" cx="250" cy="225" r="8"/><text x="250" y="244">R</text></g>
-        <g class="node" data-letter="L"><circle class="pad" cx="285" cy="225" r="8"/><text x="305" y="225">L</text></g>
-
-        <!-- ROW 5: C -->
-        <g class="node" data-letter="C"><circle class="pad" cx="100" cy="275" r="8"/><text x="115" y="290">C</text></g>
-
-        <!-- ROW 6: X — D | (W column descends from A) -->
-        <g class="node" data-letter="X"><rect class="pad" x="30" y="307" width="24" height="16" rx="2"/><text x="68" y="315">X</text></g>
-        <g class="node" data-letter="D"><circle class="pad" cx="115" cy="315" r="8"/><text x="130" y="333">D</text></g>
-
-        <!-- ROW 7: W (dash, .--) and P (dot, .--.) — W aligned under A -->
-        <g class="node" data-letter="W"><rect class="pad" x="208" y="352" width="24" height="16" rx="2"/><text x="220" y="382">W</text></g>
-        <g class="node" data-letter="P"><circle class="pad" cx="280" cy="360" r="8"/><text x="295" y="362">P</text></g>
-
-        <!-- ROW 8: B | J -->
-        <g class="node" data-letter="B"><circle class="pad" cx="115" cy="370" r="8"/><text x="115" y="392">B</text></g>
-        <g class="node" data-letter="J"><rect class="pad" x="208" y="395" width="24" height="16" rx="2"/><text x="240" y="403">J</text></g>
-      </svg>
-    </div>
+  <div class="header">
+    <div class="header-title">모스부호 · MORSE CODE</div>
+    <div class="header-sub">점과 선으로 말하다</div>
   </div>
 
-  <div class="controls">
-    <div class="input-display">
-      <div class="input-row">
-        <span class="input-label">텍스트</span>
-        <span class="input-value" id="textOut">&nbsp;</span>
+  <div class="main-grid">
+
+    <!-- PCB CARD -->
+    <div class="pcb-wrapper">
+      <div class="pcb-card">
+        <div class="pcb-title"><span>MORSE</span><span>CODE</span></div>
+        <svg class="tree" viewBox="0 0 340 460" id="treeSvg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+
+          <!-- Antenna -->
+          <g class="antenna">
+            <polygon points="160,38 180,38 170,22" fill="none"/>
+            <line x1="170" y1="38" x2="170" y2="60"/>
+          </g>
+
+          <!-- TOP HORIZONTAL: O—M—T  E—I—S—H -->
+          <line class="trace" x1="50" y1="70" x2="170" y2="70"/>
+          <line class="trace" x1="170" y1="70" x2="170" y2="60"/>
+          <line class="trace" x1="170" y1="60" x2="170" y2="70"/>
+          <line class="trace" x1="170" y1="70" x2="310" y2="70"/>
+
+          <!-- LEFT TRUNK: T(170,70) → N(170,225) → D(170,335) → B(170,415) — ONE CONTINUOUS LINE -->
+          <line class="trace" x1="170" y1="70" x2="170" y2="415"/>
+
+          <!-- RIGHT TRUNK: doesn't exist as single line - E goes down separately -->
+          <!-- E(200,70) → goes to A row via diagonal? No - look at original: 
+               E column drops to A position which is right of N -->
+          <!-- Actually the E trunk is: E(200) drops down and connects to A row at y=225 -->
+          <!-- Let me make E trunk: vertical from E(200,70) to A(200,225), then continues to W(200,335), then to J(200,415) -->
+          <line class="trace" x1="200" y1="70" x2="200" y2="415"/>
+
+          <!-- M branch down to G/Q row -->
+          <line class="trace" x1="120" y1="70" x2="120" y2="135"/>
+          <line class="trace" x1="80" y1="135" x2="120" y2="135"/>
+          <line class="trace" x1="120" y1="135" x2="120" y2="180"/>
+
+          <!-- I branch down to U/V row -->
+          <line class="trace" x1="240" y1="70" x2="240" y2="135"/>
+          <line class="trace" x1="240" y1="135" x2="278" y2="135"/>
+          <line class="trace" x1="240" y1="135" x2="240" y2="180"/>
+
+          <!-- N row horizontal: Y—K—N(left trunk) -->
+          <line class="trace" x1="55" y1="225" x2="170" y2="225"/>
+          <!-- A row horizontal: A(right trunk)—R—L -->
+          <line class="trace" x1="200" y1="225" x2="305" y2="225"/>
+
+          <!-- K down to C -->
+          <line class="trace" x1="100" y1="225" x2="100" y2="275"/>
+
+          <!-- D row horizontal: X—D(left trunk) -->
+          <line class="trace" x1="55" y1="335" x2="170" y2="335"/>
+          <!-- W row horizontal: W(right trunk)—P -->
+          <line class="trace" x1="200" y1="335" x2="285" y2="335"/>
+
+          <!-- silk dots -->
+          <circle class="silk-dot" cx="290" cy="100" r="1"/>
+          <circle class="silk-dot" cx="40" cy="180" r="1"/>
+          <circle class="silk-dot" cx="290" cy="270" r="1"/>
+          <circle class="silk-dot" cx="40" cy="380" r="1"/>
+          <circle class="silk-dot" cx="270" cy="400" r="1"/>
+
+          <!-- ============ PADS ============ -->
+          <!-- Top row: O M T  E I S H -->
+          <g class="node" data-letter="O"><rect class="pad" x="32" y="58" width="36" height="24" rx="3"/><text x="50" y="71">O</text></g>
+          <g class="node" data-letter="M"><rect class="pad" x="102" y="58" width="36" height="24" rx="3"/><text x="120" y="71">M</text></g>
+          <g class="node" data-letter="T"><rect class="pad" x="152" y="58" width="36" height="24" rx="3"/><text x="170" y="71">T</text></g>
+          <g class="node" data-letter="E"><circle class="pad" cx="200" cy="70" r="13"/><text x="200" y="71">E</text></g>
+          <g class="node" data-letter="I"><circle class="pad" cx="240" cy="70" r="13"/><text x="240" y="71">I</text></g>
+          <g class="node" data-letter="S"><circle class="pad" cx="275" cy="70" r="13"/><text x="275" y="71">S</text></g>
+          <g class="node" data-letter="H"><circle class="pad" cx="310" cy="70" r="13"/><text x="310" y="71">H</text></g>
+
+          <!-- Q—G  /  U—V row -->
+          <g class="node" data-letter="Q"><rect class="pad" x="62" y="123" width="36" height="24" rx="3"/><text x="80" y="136">Q</text></g>
+          <g class="node" data-letter="G"><circle class="pad" cx="120" cy="135" r="13"/><text x="120" y="136">G</text></g>
+          <g class="node" data-letter="U"><rect class="pad" x="222" y="123" width="36" height="24" rx="3"/><text x="240" y="136">U</text></g>
+          <g class="node" data-letter="V"><rect class="pad" x="262" y="123" width="36" height="24" rx="3"/><text x="280" y="136">V</text></g>
+
+          <!-- Z / F row -->
+          <g class="node" data-letter="Z"><circle class="pad" cx="120" cy="180" r="13"/><text x="120" y="181">Z</text></g>
+          <g class="node" data-letter="F"><circle class="pad" cx="240" cy="180" r="13"/><text x="240" y="181">F</text></g>
+
+          <!-- N row: Y K N | A R L -->
+          <g class="node" data-letter="Y"><rect class="pad" x="37" y="213" width="36" height="24" rx="3"/><text x="55" y="226">Y</text></g>
+          <g class="node" data-letter="K"><rect class="pad" x="82" y="213" width="36" height="24" rx="3"/><text x="100" y="226">K</text></g>
+          <g class="node" data-letter="N"><circle class="pad" cx="170" cy="225" r="13"/><text x="170" y="226">N</text></g>
+          <g class="node" data-letter="A"><rect class="pad" x="182" y="213" width="36" height="24" rx="3"/><text x="200" y="226">A</text></g>
+          <g class="node" data-letter="R"><circle class="pad" cx="245" cy="225" r="13"/><text x="245" y="226">R</text></g>
+          <g class="node" data-letter="L"><circle class="pad" cx="290" cy="225" r="13"/><text x="290" y="226">L</text></g>
+
+          <!-- C below K -->
+          <g class="node" data-letter="C"><circle class="pad" cx="100" cy="275" r="13"/><text x="100" y="276">C</text></g>
+
+          <!-- D row: X D | W P -->
+          <g class="node" data-letter="X"><rect class="pad" x="37" y="323" width="36" height="24" rx="3"/><text x="55" y="336">X</text></g>
+          <g class="node" data-letter="D"><circle class="pad" cx="170" cy="335" r="13"/><text x="170" y="336">D</text></g>
+          <g class="node" data-letter="W"><rect class="pad" x="182" y="323" width="36" height="24" rx="3"/><text x="200" y="336">W</text></g>
+          <g class="node" data-letter="P"><circle class="pad" cx="285" cy="335" r="13"/><text x="285" y="336">P</text></g>
+
+          <!-- B (left trunk end) | J (right trunk end) -->
+          <g class="node" data-letter="B"><circle class="pad" cx="170" cy="415" r="13"/><text x="170" y="416">B</text></g>
+          <g class="node" data-letter="J"><rect class="pad" x="182" y="403" width="36" height="24" rx="3"/><text x="200" y="416">J</text></g>
+        </svg>
       </div>
-      <div class="input-row">
-        <span class="input-label">모스</span>
-        <span class="input-value" id="morseOut">&nbsp;</span>
+    </div>
+
+    <!-- ============ CONTROLS ============ -->
+    <div class="controls">
+
+      <div class="tabs">
+        <button class="tab active" data-tab="key">전신키 입력</button>
+        <button class="tab" data-tab="trans">통역기</button>
       </div>
-      <div class="current-input" id="currentBuf"></div>
-    </div>
 
-    <button class="telegraph-key" id="btnKey">
-      <div class="key-fill" id="keyFill"></div>
-      <div class="key-threshold" id="keyThreshold"></div>
-      <div class="label-row">
-        <div class="symbol-preview" id="symPreview">·</div>
-        <div class="key-label">전신키 · TAP / HOLD</div>
-        <div class="hint">SPACE — 짧게: 점 · 길게: 선</div>
+      <!-- TAB: KEY -->
+      <div class="tab-content active" id="tab-key">
+        <div class="display-panel">
+          <div class="io-row">
+            <span class="io-label">텍스트</span>
+            <span class="io-value" id="textOut">&nbsp;</span>
+            <button class="copy-btn" id="copyText">복사</button>
+          </div>
+          <div class="io-row">
+            <span class="io-label">모스</span>
+            <span class="io-value" id="morseOut">&nbsp;</span>
+            <button class="copy-btn" id="copyMorse">복사</button>
+          </div>
+          <div class="current-buf" id="currentBuf"></div>
+        </div>
+
+        <button class="telegraph-key" id="btnKey">
+          <div class="key-fill" id="keyFill"></div>
+          <div class="key-threshold" id="keyThreshold"></div>
+          <div class="label-row">
+            <div class="symbol-preview" id="symPreview">·</div>
+            <div class="key-text">
+              <div class="key-label">전신키 · TAP / HOLD</div>
+              <div class="hint">SPACE — 짧게:점 길게:선</div>
+            </div>
+          </div>
+        </button>
+
+        <div class="action-row">
+          <button class="key-btn" id="btnSpace">간격<span class="hint">SHIFT</span></button>
+          <button class="key-btn" id="btnDel">← 지우기<span class="hint">⌫</span></button>
+          <button class="key-btn" id="btnPlay">▶ 재생<span class="hint">P</span></button>
+          <button class="key-btn" id="btnClear">초기화</button>
+        </div>
+
+        <div class="sensitivity">
+          <span>임계값</span>
+          <input type="range" id="threshold" min="100" max="500" step="10" value="200">
+          <span class="val" id="thresholdVal">200ms</span>
+        </div>
       </div>
-    </button>
 
-    <div class="action-row">
-      <button class="key-btn" id="btnSpace">간격<span class="hint">SHIFT</span></button>
-      <button class="key-btn" id="btnDel">← 지우기<span class="hint">⌫</span></button>
-      <button class="key-btn" id="btnPlay">▶ 재생<span class="hint">P</span></button>
-      <button class="key-btn" id="btnClear">초기화</button>
+      <!-- TAB: TRANSLATE -->
+      <div class="tab-content" id="tab-trans">
+        <div class="display-panel">
+          <div class="io-row">
+            <span class="io-label" style="font-size:0.55rem">텍스트 → 모스</span>
+          </div>
+        </div>
+        <textarea class="translate-input" id="textToMorse" rows="2" placeholder="HELLO WORLD"></textarea>
+        <div class="translate-result">
+          <div class="io-row">
+            <span class="io-value" id="textToMorseResult" style="font-size:0.85rem">&nbsp;</span>
+            <button class="copy-btn" id="copyT2M">복사</button>
+          </div>
+        </div>
+
+        <div class="display-panel">
+          <div class="io-row">
+            <span class="io-label" style="font-size:0.55rem">모스 → 텍스트</span>
+          </div>
+        </div>
+        <textarea class="translate-input" id="morseToText" rows="2" placeholder=".... . .-.. .-.. ---  / .-- --- .-. .-.. -.."></textarea>
+        <div class="translate-result">
+          <div class="io-row">
+            <span class="io-value" id="morseToTextResult" style="font-size:0.95rem">&nbsp;</span>
+            <button class="copy-btn" id="copyM2T">복사</button>
+          </div>
+        </div>
+
+        <div class="action-row" style="grid-template-columns: 1fr 1fr">
+          <button class="key-btn" id="btnPlayTrans">▶ 모스 재생</button>
+          <button class="key-btn" id="btnClearTrans">초기화</button>
+        </div>
+      </div>
+
     </div>
 
-    <div class="sensitivity">
-      <label>임계값</label>
-      <input type="range" id="threshold" min="100" max="500" step="10" value="200">
-      <span class="val" id="thresholdVal">200ms</span>
-    </div>
-
-    <div class="helper-text">
-      짧게 → <span class="dot-color">점(·)</span> &nbsp; 길게 → <span class="dash-color">선(─)</span><br>
-      누르는 동안 톤 발생 · 1.2초 멈추면 글자 확정
-    </div>
   </div>
-
 </div>
 
-<footer>&lt; SAMUEL F. B. MORSE · 1836 &gt;</footer>
-
-</div>
+<div class="toast" id="toast">복사됨</div>
 
 <script>
 const MORSE = {
   A:'.-', B:'-...', C:'-.-.', D:'-..', E:'.', F:'..-.', G:'--.', H:'....',
   I:'..', J:'.---', K:'-.-', L:'.-..', M:'--', N:'-.', O:'---', P:'.--.',
   Q:'--.-', R:'.-.', S:'...', T:'-', U:'..-', V:'...-', W:'.--', X:'-..-',
-  Y:'-.--', Z:'--..'
+  Y:'-.--', Z:'--..',
+  '0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....',
+  '6':'-....','7':'--...','8':'---..','9':'----.',
+  '.':'.-.-.-',',':'--..--','?':'..--..','!':'-.-.--','/':'-..-.',
+  '(':'-.--.',')':'-.--.-','&':'.-...',':':'---...',';':'-.-.-.',
+  '=':'-...-','+':'.-.-.','-':'-....-','_':'..--.-','"':'.-..-.','$':'...-..-','@':'.--.-.'
 };
 const FROM_MORSE = Object.fromEntries(Object.entries(MORSE).map(([l, m]) => [m, l]));
 
@@ -618,21 +722,18 @@ let buffer = '';
 let text = '';
 let commitTimer = null;
 const COMMIT_DELAY = 1200;
-
 let DASH_THRESHOLD = 200;
 const MAX_PRESS_DISPLAY = 600;
 
 const $ = id => document.getElementById(id);
 
+// ── Audio ──
 let audioCtx = null;
 function getAudio() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   if (audioCtx.state === 'suspended') audioCtx.resume();
   return audioCtx;
 }
-
 let liveOsc = null, liveGain = null;
 function startLiveTone() {
   const ctx = getAudio();
@@ -640,10 +741,8 @@ function startLiveTone() {
   try {
     liveOsc = ctx.createOscillator();
     liveGain = ctx.createGain();
-    liveOsc.connect(liveGain);
-    liveGain.connect(ctx.destination);
-    liveOsc.frequency.value = 600;
-    liveOsc.type = 'sine';
+    liveOsc.connect(liveGain); liveGain.connect(ctx.destination);
+    liveOsc.frequency.value = 600; liveOsc.type = 'sine';
     liveGain.gain.setValueAtTime(0, ctx.currentTime);
     liveGain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + 0.008);
     liveOsc.start();
@@ -661,14 +760,12 @@ function stopLiveTone() {
   } catch (e) {}
   liveOsc = null; liveGain = null;
 }
-
 function beep(start, dur, freq = 600, vol = 0.25) {
   const ctx = getAudio();
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
   osc.connect(gain); gain.connect(ctx.destination);
-  osc.frequency.value = freq;
-  osc.type = 'sine';
+  osc.frequency.value = freq; osc.type = 'sine';
   gain.gain.setValueAtTime(0, start);
   gain.gain.linearRampToValueAtTime(vol, start + 0.005);
   gain.gain.setValueAtTime(vol, start + dur / 1000 - 0.005);
@@ -676,16 +773,30 @@ function beep(start, dur, freq = 600, vol = 0.25) {
   osc.start(start);
   osc.stop(start + dur / 1000);
 }
-
 function clickSound() {
   const ctx = getAudio();
-  beep(ctx.currentTime, 40, 880, 0.15);
+  beep(ctx.currentTime, 35, 880, 0.12);
 }
 
+// ── Translation helpers ──
+function textToMorse(t) {
+  return t.toUpperCase().split('').map(c => {
+    if (c === ' ') return '/';
+    return MORSE[c] || '';
+  }).filter(Boolean).join(' ');
+}
+function morseToText(m) {
+  return m.trim().split(/\s+/).map(code => {
+    if (code === '/' || code === '|') return ' ';
+    return FROM_MORSE[code] || '';
+  }).join('');
+}
+
+// ── Render (key tab) ──
 function render() {
   $('currentBuf').textContent = buffer.replace(/\./g, '·').replace(/-/g, '─');
   $('textOut').textContent = text || '\u00a0';
-  $('morseOut').textContent = text.split('').map(c => c === ' ' ? '/' : MORSE[c] || '').join(' ') || '\u00a0';
+  $('morseOut').textContent = textToMorse(text) || '\u00a0';
 }
 
 function lightUpLetter(letter) {
@@ -697,7 +808,6 @@ function lightUpLetter(letter) {
     setTimeout(() => node.classList.remove('lit'), 1400);
   }
 }
-
 function previewLetter() {
   document.querySelectorAll('.node.lit').forEach(n => n.classList.remove('lit'));
   const preview = FROM_MORSE[buffer];
@@ -706,19 +816,16 @@ function previewLetter() {
     if (node) node.classList.add('lit');
   }
 }
-
 function addSymbol(sym) {
   buffer += sym;
   resetCommitTimer();
   render();
   previewLetter();
 }
-
 function resetCommitTimer() {
   if (commitTimer) clearTimeout(commitTimer);
   commitTimer = setTimeout(commitLetter, COMMIT_DELAY);
 }
-
 function commitLetter() {
   if (!buffer) return;
   const letter = FROM_MORSE[buffer];
@@ -727,21 +834,18 @@ function commitLetter() {
   buffer = '';
   render();
 }
-
 function addSpace() {
   if (buffer) commitLetter();
   if (text && !text.endsWith(' ')) text += ' ';
   render();
   clickSound();
 }
-
 function backspace() {
   if (buffer) buffer = buffer.slice(0, -1);
   else if (text) text = text.slice(0, -1);
   render();
   clickSound();
 }
-
 function clearAll() {
   buffer = ''; text = '';
   document.querySelectorAll('.node.lit').forEach(n => n.classList.remove('lit'));
@@ -749,19 +853,20 @@ function clearAll() {
   clickSound();
 }
 
-function playAll() {
-  if (buffer) commitLetter();
-  if (!text) return;
+// ── Playback ──
+function playMorseString(morseStr, onLetter) {
+  if (!morseStr) return;
   const ctx = getAudio();
   const DOT = 90, DASH = DOT * 3, GAP = DOT, LETTER_GAP = DOT * 3, WORD_GAP = DOT * 7;
   let t = ctx.currentTime + 0.05;
 
-  text.split('').forEach(ch => {
-    if (ch === ' ') { t += WORD_GAP / 1000; return; }
-    const code = MORSE[ch];
-    if (!code) return;
-    const startMs = (t - ctx.currentTime) * 1000;
-    setTimeout(() => lightUpLetter(ch), startMs);
+  morseStr.split(' ').forEach(code => {
+    if (code === '/' || code === '') { t += WORD_GAP / 1000; return; }
+    if (onLetter) {
+      const letter = FROM_MORSE[code];
+      const startMs = (t - ctx.currentTime) * 1000;
+      if (letter) setTimeout(() => onLetter(letter), startMs);
+    }
     code.split('').forEach(s => {
       const dur = s === '.' ? DOT : DASH;
       beep(t, dur);
@@ -771,11 +876,18 @@ function playAll() {
   });
 }
 
+function playAll() {
+  if (buffer) commitLetter();
+  if (!text) return;
+  playMorseString(textToMorse(text), lightUpLetter);
+}
+
 function flashBtn(btn) {
   btn.classList.add('pressed');
   setTimeout(() => btn.classList.remove('pressed'), 120);
 }
 
+// ── Telegraph key ──
 const btnKey = $('btnKey');
 const keyFill = $('keyFill');
 const symPreview = $('symPreview');
@@ -802,12 +914,9 @@ function tickPress() {
   const elapsed = performance.now() - pressStartTime;
   const pct = Math.min((elapsed / MAX_PRESS_DISPLAY) * 100, 100);
   keyFill.style.width = pct + '%';
-
-  if (elapsed >= DASH_THRESHOLD) {
-    if (!btnKey.classList.contains('is-dash')) {
-      btnKey.classList.add('is-dash');
-      symPreview.textContent = '─';
-    }
+  if (elapsed >= DASH_THRESHOLD && !btnKey.classList.contains('is-dash')) {
+    btnKey.classList.add('is-dash');
+    symPreview.textContent = '─';
   }
   rafId = requestAnimationFrame(tickPress);
 }
@@ -818,16 +927,45 @@ function endPress() {
   pressStartTime = 0;
   if (rafId) cancelAnimationFrame(rafId);
   stopLiveTone();
-
   btnKey.classList.remove('pressing', 'is-dash');
   keyFill.style.width = '0%';
   symPreview.textContent = '·';
-
   if (duration < DASH_THRESHOLD) addSymbol('.');
   else addSymbol('-');
 }
 
+// ── Toast ──
+function showToast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+// ── Copy ──
+async function copyToClipboard(str, btn) {
+  if (!str || str.trim() === '') {
+    showToast('복사할 내용이 없습니다');
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(str);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 800);
+    showToast('복사됨');
+  } catch (e) {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = str; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('복사됨');
+  }
+}
+
+// ── Keyboard ──
 window.addEventListener('keydown', (e) => {
+  // Skip if focus on textarea
+  if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
   if (e.code === 'Space') {
     e.preventDefault();
     if (!e.repeat) startPress();
@@ -844,6 +982,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 window.addEventListener('keyup', (e) => {
+  if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
   if (e.code === 'Space') { e.preventDefault(); endPress(); }
 });
 
@@ -861,23 +1000,63 @@ $('btnDel').addEventListener('click', backspace);
 $('btnPlay').addEventListener('click', () => { playAll(); });
 $('btnClear').addEventListener('click', clearAll);
 
+// PCB pad clicks
 document.querySelectorAll('.node').forEach(node => {
   node.addEventListener('click', () => {
     if (buffer) commitLetter();
-    const letter = node.dataset.letter;
-    text += letter;
-    lightUpLetter(letter);
+    text += node.dataset.letter;
+    lightUpLetter(node.dataset.letter);
     render();
     clickSound();
   });
 });
 
-const thresholdInput = $('threshold');
-const thresholdVal = $('thresholdVal');
-thresholdInput.addEventListener('input', () => {
-  DASH_THRESHOLD = parseInt(thresholdInput.value, 10);
-  thresholdVal.textContent = DASH_THRESHOLD + 'ms';
+// Sensitivity
+$('threshold').addEventListener('input', () => {
+  DASH_THRESHOLD = parseInt($('threshold').value, 10);
+  $('thresholdVal').textContent = DASH_THRESHOLD + 'ms';
   updateThresholdMarker();
+});
+
+// Copy buttons (key tab)
+$('copyText').addEventListener('click', () => copyToClipboard(text, $('copyText')));
+$('copyMorse').addEventListener('click', () => copyToClipboard(textToMorse(text), $('copyMorse')));
+
+// ── Tabs ──
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    $('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// ── Translator ──
+const t2m = $('textToMorse');
+const m2t = $('morseToText');
+const t2mRes = $('textToMorseResult');
+const m2tRes = $('morseToTextResult');
+
+t2m.addEventListener('input', () => {
+  t2mRes.textContent = textToMorse(t2m.value) || '\u00a0';
+});
+m2t.addEventListener('input', () => {
+  m2tRes.textContent = morseToText(m2t.value) || '\u00a0';
+});
+
+$('copyT2M').addEventListener('click', () => copyToClipboard(t2mRes.textContent.trim(), $('copyT2M')));
+$('copyM2T').addEventListener('click', () => copyToClipboard(m2tRes.textContent.trim(), $('copyM2T')));
+
+$('btnPlayTrans').addEventListener('click', () => {
+  // Play whichever side has content
+  const morse = t2m.value ? textToMorse(t2m.value) : m2t.value;
+  if (morse) playMorseString(morse, lightUpLetter);
+});
+$('btnClearTrans').addEventListener('click', () => {
+  t2m.value = ''; m2t.value = '';
+  t2mRes.textContent = '\u00a0'; m2tRes.textContent = '\u00a0';
+  clickSound();
 });
 
 document.addEventListener('gesturestart', (e) => e.preventDefault());
